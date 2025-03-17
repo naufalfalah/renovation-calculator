@@ -41,14 +41,14 @@ class BudgetCalculationService
         $position = $this->calculateMarketPosition($marketData);
 
         // Step 6: Get Budget Range
-        $lowerBoundRounded = round($this->lowerBoundTotal + ($this->upperBoundTotal * 0.4));
-        $upperBoundRounded = round($this->lowerBoundTotal + ($this->upperBoundTotal * 0.6));
+        $minimumBudgetRounded = round($this->lowerBoundTotal + ($this->upperBoundTotal * 0.4));
+        $maximumBudgetRounded = round($this->lowerBoundTotal + ($this->upperBoundTotal * 0.6));
 
         return [
             'budgetRange' => sprintf(
                 '$%s - $%s',
-                number_format($lowerBoundRounded),
-                number_format($upperBoundRounded)
+                number_format($minimumBudgetRounded),
+                number_format($maximumBudgetRounded)
             ),
             'workPercentages' => $workPercentages,
             'roomPercentages' => $roomPercentages,
@@ -56,7 +56,7 @@ class BudgetCalculationService
         ];
     }
 
-    function getAverageBudget($package)
+    function getAverageBudget($package): int | float
     {
         return ($package['lower_bound_budget'] + $package['upper_bound_budget']) / 2;
     }
