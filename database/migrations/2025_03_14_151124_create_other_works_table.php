@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('other_works', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', WorkTypeEnum::values());
+            $table->string('type');
             $table->timestamps();
         });
     }

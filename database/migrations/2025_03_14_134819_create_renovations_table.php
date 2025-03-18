@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('renovations', function (Blueprint $table) {
             $table->id();
-            $table->enum('property_type', ['hdb', 'condo', 'landed']);
-            $table->enum('property_condition', ['new', 'resale']);
-            $table->enum('base_unit', ['m2', 'sqft']);
+            $table->string('property_type');
+            $table->string('property_status');
+            $table->string('base_unit');
             $table->integer('size');
             $table->timestamps();
         });

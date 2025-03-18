@@ -34,7 +34,7 @@ class BudgetCalculationServiceTest extends TestCase
     {
         $userRenovation = [
             'property_type' => 'hdb',
-            'property_condition' => 'new',
+            'property_status' => 'new',
             'base_unit' => 'sqft',
             'size' => 100,
             'main' => [

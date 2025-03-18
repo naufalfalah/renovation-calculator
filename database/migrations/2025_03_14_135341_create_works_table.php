@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('works', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('room_id');
-            $table->enum('type', WorkTypeEnum::values());
+            $table->string('type');
             $table->timestamps();
 
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
