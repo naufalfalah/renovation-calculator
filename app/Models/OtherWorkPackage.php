@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class OtherWorkPackage extends Model
 {
     protected $guarded = [];
+
+    public function work()
+    {
+        return $this->belongsTo(OtherWork::class);
+    }
 }

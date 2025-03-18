@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedInteger('lower_bound_budget');
             $table->unsignedInteger('upper_bound_budget');
-            $table->json('description')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
 
             $table->foreign('other_work_id')->references('id')->on('works')->onDelete('cascade');

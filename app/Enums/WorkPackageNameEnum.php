@@ -21,4 +21,11 @@ enum WorkPackageNameEnum: string
     {
         return array_column(self::cases(), 'value');
     }
+
+    public static function labelFromValue(string $value): string
+    {
+        $case = self::tryFrom($value);
+
+        return $case?->label() ?? 'Unknown';
+    }
 }

@@ -1,195 +1,468 @@
 let currentStep = 1;
 
 function showStep(step) {
-  const steps = document.querySelectorAll('.form-step');
+    const steps = document.querySelectorAll('.form-step');
 
-  steps.forEach((stepElement) => {
-    const stepNum = parseInt(stepElement.getAttribute('data-step'), 10);
+    steps.forEach((stepElement) => {
+        const stepNum = parseInt(stepElement.getAttribute('data-step'), 10);
 
-    if (stepNum === step) {
-      stepElement.classList.remove('hidden');
-      stepElement.classList.add('active');
-    } else {
-      stepElement.classList.add('hidden');
-      stepElement.classList.remove('active');
-    }
-  });
+        if (stepNum === step) {
+            stepElement.classList.remove('hidden');
+            stepElement.classList.add('active');
+        } else {
+            stepElement.classList.add('hidden');
+            stepElement.classList.remove('active');
+        }
+    });
 }
 
 function nextStep() {
-  const totalSteps = document.querySelectorAll('.form-step').length;
-
-  if (currentStep < totalSteps) {
+    const totalSteps = document.querySelectorAll('.form-step').length;
     currentStep++;
+
+    if (currentStep === totalSteps) {
+        // alert("You've reached the final step!");
+        return;
+    }
+
+    if (currentStep === 3) {
+        const step2 = document.querySelector('[data-step="2"]');
+        const checkboxes = step2.querySelectorAll('input[type="checkbox"]');
+
+        if (checkboxes.length > 0 && !checkboxes[0].checked) {
+            currentStep++;
+        }
+    }
+
+    if (currentStep === 4) {
+        const step2 = document.querySelector('[data-step="2"]');
+        const checkboxes = step2.querySelectorAll('input[type="checkbox"]');
+
+        if (checkboxes.length > 0 && !checkboxes[1].checked) {
+            currentStep++;
+        }
+    }
+
+    if (currentStep === 5) {
+        const step2 = document.querySelector('[data-step="2"]');
+        const checkboxes = step2.querySelectorAll('input[type="checkbox"]');
+
+        if (checkboxes.length > 0 && !checkboxes[2].checked) {
+            currentStep++;
+        }
+    }
+
+    if (currentStep === 6) {
+        const step2 = document.querySelector('[data-step="2"]');
+        const checkboxes = step2.querySelectorAll('input[type="checkbox"]');
+
+        if (checkboxes.length > 0 && !checkboxes[3].checked) {
+            currentStep++;
+            return;
+        }
+    }
+
     showStep(currentStep);
-  } else {
-    alert("You've reached the final step!");
-  }
 }
 
 function prevStep() {
-  if (currentStep > 1) {
     currentStep--;
+
+    if (currentStep === 1) {
+        return;
+    }
+
+    if (currentStep === 6) {
+        const step2 = document.querySelector('[data-step="2"]');
+        const checkboxes = step2.querySelectorAll('input[type="checkbox"]');
+
+        if (checkboxes.length > 0 && !checkboxes[3].checked) {
+            currentStep--;
+            return;
+        }
+    }
+
+    if (currentStep === 5) {
+        const step2 = document.querySelector('[data-step="2"]');
+        const checkboxes = step2.querySelectorAll('input[type="checkbox"]');
+
+        if (checkboxes.length > 0 && !checkboxes[2].checked) {
+            currentStep--;
+        }
+    }
+
+    if (currentStep === 4) {
+        const step2 = document.querySelector('[data-step="2"]');
+        const checkboxes = step2.querySelectorAll('input[type="checkbox"]');
+
+        if (checkboxes.length > 0 && !checkboxes[1].checked) {
+            currentStep--;
+        }
+    }
+
+    if (currentStep === 3) {
+        const step2 = document.querySelector('[data-step="2"]');
+        const checkboxes = step2.querySelectorAll('input[type="checkbox"]');
+
+        if (checkboxes.length > 0 && !checkboxes[0].checked) {
+            currentStep--;
+        }
+    }
+
     showStep(currentStep);
-  }
 }
 
-function generateReport() {
-    console.log('Generating report...');
+const prevButtons = document.querySelectorAll('.prev-btn');
+prevButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        prevStep();
+    });
+});
 
-    setTimeout(() => {
-      console.log('Report generated successfully.');
-
-      nextStep(9);
-    }, 1000);
+function showError(element, message) {
+    const error = document.createElement('div');
+    error.classList.add('error-message');
+    error.style.color = 'red';
+    error.style.marginTop = '5px';
+    error.textContent = message;
+    element.appendChild(error);
 }
+
+// Step 1
+document.addEventListener('DOMContentLoaded', function () {
+    const nextBtn1 = document.querySelector('.next-btn#nextBtn1');
+
+    nextBtn1.addEventListener('click', function (e) {
+        e.preventDefault();
+        let isValid = true;
+
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.remove());
+
+        const propertyTypeRadios = document.querySelectorAll('input[name="property_type"]');
+        if (![...propertyTypeRadios].some(radio => radio.checked)) {
+            showError(propertyTypeRadios[0].closest('.form-group'), 'Please select a property type');
+            isValid = false;
+        }
+
+        const propertyStatusRadios = document.querySelectorAll('input[name="property_status"]');
+        if (![...propertyStatusRadios].some(radio => radio.checked)) {
+            showError(propertyStatusRadios[0].closest('.form-group'), 'Please select a property status');
+            isValid = false;
+        }
+
+        const propertySizeInput = document.querySelector('input[name="size"]');
+        if (!propertySizeInput.value.trim()) {
+            showError(propertySizeInput.parentElement, 'Please enter the property size');
+            isValid = false;
+        }
+
+        const roomSelects = document.querySelectorAll('select[name^="number_of_rooms"]');
+        roomSelects.forEach(select => {
+            if (!select.value) {
+                const roomName = select.dataset.name || 'room';
+                showError(select.parentElement, `Please select number of ${roomName}s`);
+                isValid = false;
+            }
+        });
+
+        if (isValid) {
+            nextStep();
+        }
+    });
+});
+
+const roomSelects = document.querySelectorAll('select[name^="number_of_rooms"]');
+roomSelects.forEach(select => {
+    select.addEventListener('change', function () {
+        const roomId = this.getAttribute('id').replace('number_of_room_', '');
+        const selectedValue = this.value;
+
+        const relatedCheckbox = document.querySelector(`input[type="checkbox"][data-id="${roomId}"]`);
+
+        if (relatedCheckbox) {
+            if (selectedValue === '0' || selectedValue === '') {
+                relatedCheckbox.disabled = true;
+                relatedCheckbox.checked = false;
+            } else {
+                relatedCheckbox.disabled = false;
+            }
+        }
+    });
+});
+
+// Step 2
+document.addEventListener('DOMContentLoaded', function () {
+    const nextBtn2 = document.querySelector('.next-btn#nextBtn2');
+
+    nextBtn2.addEventListener('click', function (e) {
+        e.preventDefault();
+        let isValid = true;
+
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.remove());
+
+        const checkboxes = document.querySelectorAll('[data-step="2"] input[type="checkbox"][name="rooms[]"]');
+        const errorContainer = document.querySelector('[data-step="2"] .error-container') || checkboxes[0]?.parentElement;
+
+        const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+        if (!isChecked) {
+            if (errorContainer) {
+                showError(errorContainer, `Please select at least one room`);
+            }
+            isValid = false;
+        }
+
+        if (isValid) {
+            nextStep();
+        }
+    });
+});
+
+// Step 3
+document.addEventListener('DOMContentLoaded', function () {
+    const nextBtnStep3 = document.querySelector('[data-step="3"] .next-btn');
+
+    nextBtnStep3.addEventListener('click', function (e) {
+        e.preventDefault();
+        let isValid = true;
+
+        const errorMessages = document.querySelectorAll('[data-step="3"] .error-message');
+        errorMessages.forEach(msg => msg.remove());
+        const errorContainer = document.querySelector('[data-step="3"] .error-container') || radios[0]?.parentElement;
+
+        const inputs = document.querySelectorAll(`input[name^="main[living]"]`);
+        let hasChecked = false;
+        inputs.forEach(input => {
+            if (input.checked) {
+                hasChecked = true;
+            }
+        });
+
+        if (!hasChecked) {
+            if (errorContainer) {
+                showError(errorContainer, `Please select at least one work package`);
+            }
+            isValid = false;
+        }
+
+        if (isValid) {
+            nextStep();
+        }
+    });
+});
+
+// Step 4
+document.addEventListener('DOMContentLoaded', function () {
+    const nextBtnStep4 = document.querySelector('[data-step="4"] .next-btn');
+
+    nextBtnStep4.addEventListener('click', function (e) {
+        e.preventDefault();
+        let isValid = true;
+
+        const errorMessages = document.querySelectorAll('[data-step="4"] .error-message');
+        errorMessages.forEach(msg => msg.remove());
+        const errorContainer = document.querySelector('[data-step="4"] .error-container') || radios[0]?.parentElement;
+
+        const inputs = document.querySelectorAll(`input[name^="main[kitchen]"]`);
+        let hasChecked = false;
+        inputs.forEach(input => {
+            if (input.checked) {
+                hasChecked = true;
+            }
+        });
+
+        if (!hasChecked) {
+            if (errorContainer) {
+                showError(errorContainer, `Please select at least one work package`);
+            }
+            isValid = false;
+        }
+
+        if (isValid) {
+            nextStep();
+        }
+    });
+});
+
+// Step 5
+document.addEventListener('DOMContentLoaded', function () {
+    const nextBtnStep5 = document.querySelector('[data-step="5"] .next-btn');
+
+    nextBtnStep5.addEventListener('click', function (e) {
+        e.preventDefault();
+        let isValid = true;
+
+        const errorMessages = document.querySelectorAll('[data-step="5"] .error-message');
+        errorMessages.forEach(msg => msg.remove());
+        const errorContainer = document.querySelector('[data-step="5"] .error-container') || radios[0]?.parentElement;
+
+        const inputs = document.querySelectorAll(`input[name^="main[bedroom]"]`);
+        let hasChecked = false;
+        inputs.forEach(input => {
+            if (input.checked) {
+                hasChecked = true;
+            }
+        });
+
+        if (!hasChecked) {
+            if (errorContainer) {
+                showError(errorContainer, `Please select at least one work package`);
+            }
+            isValid = false;
+        }
+
+
+        if (isValid) {
+            nextStep();
+        }
+    });
+});
+
+// Step 6
+document.addEventListener('DOMContentLoaded', function () {
+    const nextBtnStep6 = document.querySelector('[data-step="6"] .next-btn');
+
+    nextBtnStep6.addEventListener('click', function (e) {
+        e.preventDefault();
+        let isValid = true;
+
+        const errorMessages = document.querySelectorAll('[data-step="6"] .error-message');
+        errorMessages.forEach(msg => msg.remove());
+        const errorContainer = document.querySelector('[data-step="6"] .error-container') || radios[0]?.parentElement;
+
+        const inputs = document.querySelectorAll(`input[name^="main[bathroom]"]`);
+        let hasChecked = false;
+        inputs.forEach(input => {
+            if (input.checked) {
+                hasChecked = true;
+            }
+        });
+
+        if (!hasChecked) {
+            if (errorContainer) {
+                showError(errorContainer, `Please select at least one work package`);
+            }
+            isValid = false;
+        }
+
+        if (isValid) {
+            nextStep();
+        }
+    });
+});
+
+// Step 7
+document.addEventListener('DOMContentLoaded', function () {
+    const nextBtnStep7 = document.querySelector('[data-step="7"] .next-btn');
+
+    nextBtnStep7.addEventListener('click', function (e) {
+        e.preventDefault();
+        let isValid = true;
+
+        const errorMessages = document.querySelectorAll('[data-step="7"] .error-message');
+        errorMessages.forEach(msg => msg.remove());
+
+        if (isValid) {
+            nextStep();
+        }
+    });
+});
+
+// Validate email regex
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+// Validate phone number (basic numeric check)
+function validatePhone(phone) {
+    const re = /^[0-9]{6,15}$/; // Customize min-max length as needed
+    return re.test(phone);
+}
+
+// Remove previous error highlights
+function clearFieldErrors(elements) {
+    elements.forEach(el => {
+        el.classList.remove('error-input');
+        const small = el.parentNode.querySelector('small');
+        if (small) {
+            el.parentNode.removeChild(small);
+        }
+    });
+}
+
+function validateContactInfo() {
+    let isValid = true;
+
+    const fullName = document.getElementById('fullName');
+    const email = document.getElementById('email');
+    const countryCode = document.getElementById('countryCode');
+    const contactNumber = document.getElementById('contactNumber');
+    const acceptTerms = document.querySelector('input[name="acceptTerms"]');
+    const contactNumberGroupError = document.getElementById('contactNumberGroupError');
+
+    // Clear all previous error highlights
+    clearFieldErrors([fullName, email, contactNumber, countryCode]);
+
+    // Error container
+    const errorContainer = document.querySelector('[data-step="8"] .error-container');
+    errorContainer.innerHTML = '';
+
+    if (fullName.value.trim() === '') {
+        showError(fullName.parentElement, 'Full name is required.');
+        isValid = false;
+    }
+
+    if (!validateEmail(email.value)) {
+        showError(email.parentElement, 'Please enter a valid email address.');
+        isValid = false;
+    }
+
+    if (countryCode.value.trim() === '') {
+        showError(contactNumberGroupError, 'Please select a country code.');
+        isValid = false;
+    }
+
+    if (contactNumber.value.trim() === '') {
+        showError(contactNumberGroupError, 'Please enter a valid contact number.');
+        isValid = false;
+    }
+
+    if (!acceptTerms.checked) {
+        errorContainer.innerHTML += `<p style="color:red;">You must accept the terms of service.</p>`;
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+document.querySelector('[data-step="8"] .submit-btn').addEventListener('click', function (e) {
+    e.preventDefault();
+
+    if (validateContactInfo()) {
+        console.log('Contact Info Valid ✅');
+        document.querySelector('#renovationForm').submit();
+    } else {
+        console.log('Contact Info Not Valid ❌');
+    }
+});
+
+// function generateReport() {
+//     console.log('Generating report...');
+
+//     setTimeout(() => {
+//       console.log('Report generated successfully.');
+
+//       nextStep(9);
+//     }, 1000);
+// }
+
+// document.getElementById('generateReportBtn').addEventListener('click', generateReport);
 
 function restart() {
     location.reload();
 }
 
-const prevButtons = document.querySelectorAll('.prev-btn');
-prevButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    prevStep();
-  });
-});
-
-const nextButtons = document.querySelectorAll('.next-btn');
-nextButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    nextStep();
-  });
-});
-
-document.getElementById('generateReportBtn').addEventListener('click', generateReport);
 document.getElementById('restartBtn').addEventListener('click', restart);
-
-let userData = {
-  propertyType: '',
-  propertyStatus: '',
-  propertySize: '',
-  bedrooms: '',
-  bathrooms: '',
-  areas: [],
-  design: ''
-};
-
-// STEP 1 handler
-function handleStep1() {
-  const propertyType = document.querySelector('input[name="propertyType"]:checked');
-  const propertyStatus = document.querySelector('input[name="propertyStatus"]:checked');
-  const propertySize = document.getElementById('propertySize').value.trim();
-  const bedrooms = document.getElementById('bedrooms').value;
-  const bathrooms = document.getElementById('bathrooms').value;
-
-  if (!propertyType || !propertyStatus || !propertySize || !bedrooms || !bathrooms) {
-    alert('Please fill in all fields before proceeding.');
-    return;
-  }
-
-  userData.propertyType = propertyType.value;
-  userData.propertyStatus = propertyStatus.value;
-  userData.propertySize = parseInt(propertySize);
-  userData.bedrooms = bedrooms;
-  userData.bathrooms = bathrooms;
-
-  goToNextStep();
-}
-
-// Reuse this function for Step 2 and onward
-function goToNextStep() {
-  if (currentStep === 2) {
-    const checked = document.querySelectorAll('#step2 input[type="checkbox"]:checked');
-    if (checked.length === 0) {
-      alert('Please select at least one area.');
-      return;
-    }
-    userData.areas = Array.from(checked).map(cb => cb.value);
-  }
-
-  document.getElementById(`step${currentStep}`).classList.remove('active');
-  currentStep++;
-
-  if (currentStep <= 4) {
-    document.getElementById(`step${currentStep}`).classList.add('active');
-  }
-
-  if (currentStep === 4) {
-    showResult();
-  }
-}
-
-function selectOption(field, value) {
-  userData[field] = value;
-  goToNextStep();
-}
-
-function showResult() {
-  let basePrice = 10000;
-
-  // Property type adds cost
-  if (userData.propertyType === 'Condo') basePrice += 5000;
-  if (userData.propertyType === 'Landed') basePrice += 15000;
-
-  // Property status adjustment
-  if (userData.propertyStatus === 'Resale') basePrice += 8000;
-
-  // Property size factor
-  if (userData.propertySize > 1000) basePrice += (userData.propertySize - 1000) * 10;
-
-  // Bedrooms and bathrooms
-  basePrice += parseInt(userData.bedrooms) * 5000;
-  basePrice += parseInt(userData.bathrooms) * 4000;
-
-  // Areas to renovate
-  userData.areas.forEach(area => {
-    if (area === 'Living Room') basePrice += 8000;
-    if (area === 'Kitchen') basePrice += 10000;
-    if (area === 'Bathroom') basePrice += 6000;
-    if (area === 'Bedroom') basePrice += 7000;
-  });
-
-  // Design multiplier
-  if (userData.design === 'Luxury') basePrice *= 1.5;
-  if (userData.design === 'Industrial') basePrice *= 1.2;
-
-  const resultDiv = document.getElementById('result');
-  resultDiv.innerHTML = `
-    <h3>Property Details</h3>
-    <p><strong>Type:</strong> ${userData.propertyType}</p>
-    <p><strong>Status:</strong> ${userData.propertyStatus}</p>
-    <p><strong>Size:</strong> ${userData.propertySize} sqft</p>
-    <p><strong>Bedrooms:</strong> ${userData.bedrooms}</p>
-    <p><strong>Bathrooms:</strong> ${userData.bathrooms}</p>
-
-    <h3>Renovation Scope</h3>
-    <p><strong>Areas:</strong> ${userData.areas.join(', ')}</p>
-    <p><strong>Design:</strong> ${userData.design}</p>
-
-    <h3>Total Estimated Cost: SGD ${basePrice.toLocaleString()}</h3>
-  `;
-}
-
-function restartCalculator() {
-  currentStep = 1;
-  userData = {
-    propertyType: '',
-    propertyStatus: '',
-    propertySize: '',
-    bedrooms: '',
-    bathrooms: '',
-    areas: [],
-    design: ''
-  };
-
-  document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
-  document.getElementById('step1').classList.add('active');
-
-  // Clear selections
-  document.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
-  document.getElementById('propertySize').value = '';
-  document.getElementById('bedrooms').value = '';
-  document.getElementById('bathrooms').value = '';
-  document.querySelectorAll('#step2 input[type="checkbox"]').forEach(cb => cb.checked = false);
-}

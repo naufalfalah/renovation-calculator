@@ -1,65 +1,67 @@
 * {
     box-sizing: border-box;
-  }
+}
 
-  body {
+body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f5f7fa;
     color: #333;
-  }
+}
 
-  header {
+header {
     background-color: #2d89ef;
     color: white;
     padding: 1.5rem 0;
     text-align: center;
-  }
+}
 
-  .calculator-container {
+.calculator-container {
     max-width: 600px;
     margin: 2rem auto;
     background: white;
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  }
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
 
-  .step {
+.step {
     display: none;
-  }
+}
 
-  .step.active {
+.step.active {
     display: block;
-  }
+}
 
-  .form-group {
+.form-group {
     margin-bottom: 1.5rem;
-  }
+}
 
-  .form-group label {
+.form-group label {
     display: block;
     margin-top: 0.5rem;
-  }
+}
 
-  input[type="number"], select {
+input[type="number"],
+select {
     width: 100%;
     padding: 0.75rem;
     margin-top: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 1rem;
-  }
+}
 
-  input[type="radio"] {
+input[type="radio"] {
     margin-right: 0.5rem;
-  }
+}
 
-  h2 {
+h2 {
     margin-bottom: 1rem;
-  }
+}
 
-  .option-btn, .restart-btn {
+.option-btn,
+.restart-btn {
     display: block;
     width: 100%;
     margin-bottom: 1rem;
@@ -71,46 +73,48 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
-  }
+}
 
-  .option-btn:hover, .next-btn:hover, .restart-btn:hover {
+.option-btn:hover,
+.next-btn:hover,
+.restart-btn:hover {
     background-color: #1b5fa7;
-  }
+}
 
-  label {
+label {
     display: block;
     margin-bottom: 0.75rem;
-  }
+}
 
-  footer {
+footer {
     text-align: center;
     padding: 1rem 0;
     font-size: 0.9rem;
     color: #777;
-  }
+}
 
-  .step {
+.step {
     display: none;
     margin-bottom: 20px;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
-  }
+}
 
-  .step h2 {
+.step h2 {
     margin-bottom: 10px;
-  }
+}
 
-  .step h3 {
+.step h3 {
     margin-top: 15px;
     color: #333;
-  }
+}
 
-  .hidden {
+.hidden {
     display: none;
-  }
+}
 
-  button {
+button {
     margin-top: 15px;
     padding: 10px 20px;
     border: none;
@@ -118,13 +122,128 @@
     color: white;
     cursor: pointer;
     border-radius: 4px;
-  }
+}
 
-  button:hover {
+button:hover {
     background-color: #45a049;
-  }
+}
 
-  label {
+label {
     display: block;
     margin: 5px 0;
-  }
+}
+
+.error-message {
+    font-size: 0.9rem;
+    color: red;
+}
+
+input:disabled + label {
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* Step 8 Specific Styles */
+.form-step.step[data-step="8"] {
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.form-step.step[data-step="8"] h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #2d89ef;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+select:focus {
+    border-color: #2d89ef;
+    box-shadow: 0 0 5px rgba(45, 137, 239, 0.3);
+    outline: none;
+}
+
+.phone-input {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.phone-input select {
+    flex: 1;
+}
+
+.phone-input input[type="tel"] {
+    flex: 2;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: #555;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 0.75rem;
+    width: 18px;
+    height: 18px;
+}
+
+.form-actions {
+    text-align: center;
+}
+
+.submit-btn {
+    width: 100%;
+    background-color: #2d89ef;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #1b5fa7;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 480px) {
+    .phone-input {
+        flex-direction: column;
+    }
+
+    .submit-btn {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+}
