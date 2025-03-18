@@ -1,0 +1,11 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "array_syntax": true,
+        "single_quote": true
+    },
+    "exclude": [
+        "storage",
+        "vendor"
+    ]
+}
