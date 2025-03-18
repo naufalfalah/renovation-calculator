@@ -10,7 +10,7 @@ enum PropertyTypeEnum: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::HDB => 'HDB',
             self::CONDO => 'Condo',
             self::LANDED => 'Landed',

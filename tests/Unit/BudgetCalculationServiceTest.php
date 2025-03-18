@@ -11,17 +11,23 @@ class BudgetCalculationServiceTest extends TestCase
     use LoadsFixtures;
 
     protected BudgetCalculationService $service;
+
     protected $rooms;
+
     protected $works;
+
     protected $workPackages;
+
     protected $otherWorks;
+
     protected $otherWorkPackages;
+
     protected $userRenovation;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new BudgetCalculationService();
+        $this->service = new BudgetCalculationService;
 
         $this->rooms = $this->loadFixtureArray('rooms');
         $this->works = $this->loadFixtureArray('works');

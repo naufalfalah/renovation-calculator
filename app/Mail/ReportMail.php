@@ -14,6 +14,7 @@ class ReportMail extends Mailable
     use Queueable, SerializesModels;
 
     public $reportData;
+
     public $pdfContent;
 
     /**
@@ -25,14 +26,13 @@ class ReportMail extends Mailable
         $this->pdfContent = $pdfContent;
     }
 
-
     /**
      * Get the message envelope.
      */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Report ' . $this->reportData['number'],
+            subject: 'Report '.$this->reportData['number'],
         );
     }
 
@@ -55,7 +55,7 @@ class ReportMail extends Mailable
     public function attachments(): array
     {
         return [
-            Attachment::fromData(fn () => $this->pdfContent, 'report-' . $this->reportData['number'] . '.pdf')
+            Attachment::fromData(fn () => $this->pdfContent, 'report-'.$this->reportData['number'].'.pdf')
                 ->withMime('application/pdf'),
         ];
     }

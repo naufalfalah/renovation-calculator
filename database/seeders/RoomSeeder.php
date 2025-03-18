@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Room;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RoomSeeder extends Seeder
@@ -34,7 +33,7 @@ class RoomSeeder extends Seeder
             ],
         ];
 
-        foreach($rooms as $room) {
+        foreach ($rooms as $room) {
             Room::create($room);
         }
     }

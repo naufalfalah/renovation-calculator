@@ -8,7 +8,7 @@ trait LoadsFixtures
     {
         $path = base_path("tests/Fixtures/{$file}.php");
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             throw new \Exception("Fixture {$file} not found.");
         }
 
@@ -19,7 +19,7 @@ trait LoadsFixtures
     {
         $path = base_path("tests/Fixtures/{$file}.json");
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             throw new \Exception("Fixture {$file} not found.");
         }
 

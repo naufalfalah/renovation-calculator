@@ -9,7 +9,7 @@ enum BaseUnitEnum: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::SQFT => 'sqft',
             self::M2 => 'm2',
         };

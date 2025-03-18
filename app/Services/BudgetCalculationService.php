@@ -2,14 +2,15 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Collection;
-
 class BudgetCalculationService
 {
     // Step 1: Initializes Budget Ranges
     protected int $lowerBoundTotal = 0;
+
     protected int $upperBoundTotal = 0;
+
     protected array $workTypeTotalMap = [];
+
     protected array $roomTotalMap = [];
 
     public function calculate(string $propertyType, array $userSelections): array
@@ -56,17 +57,17 @@ class BudgetCalculationService
         ];
     }
 
-    function getAverageBudget($package): int | float
+    public function getAverageBudget($package): int|float
     {
         return ($package['lower_bound_budget'] + $package['upper_bound_budget']) / 2;
     }
 
-    function calculatePercentage(array $data): array
+    public function calculatePercentage(array $data): array
     {
         $total = array_sum($data);
 
         if ($total === 0) {
-            return array_map(fn() => 0, $data);
+            return array_map(fn () => 0, $data);
         }
 
         return array_map(function ($value) use ($total) {

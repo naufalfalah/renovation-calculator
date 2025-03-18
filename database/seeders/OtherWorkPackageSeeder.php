@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Enums\WorkPackageNameEnum;
 use App\Models\OtherWorkPackage;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class OtherWorkPackageSeeder extends Seeder

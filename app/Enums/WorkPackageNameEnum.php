@@ -10,7 +10,7 @@ enum WorkPackageNameEnum: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::LIGHT => 'Light',
             self::MODERATE => 'Moderate',
             self::EXTENSIVE => 'Extensive',
