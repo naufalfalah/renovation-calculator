@@ -12,4 +12,12 @@ class WorkPackage extends Model
     {
         return $this->belongsTo(Work::class);
     }
+
+    public function getFormattedBudgetAttribute()
+    {
+        $lower = number_format($this->lower_bound_budget);
+        $upper = number_format($this->upper_bound_budget);
+
+        return "$" . $lower . "-$" . $upper;
+    }
 }

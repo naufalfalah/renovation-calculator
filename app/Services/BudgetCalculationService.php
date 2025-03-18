@@ -35,7 +35,9 @@ class BudgetCalculationService
 
         // Step 4: Calculate Percentages
         $workPercentages = $this->calculatePercentage($this->workTypeTotalMap);
+        $workBudgets = $this->calculateBudget($this->workTypeTotalMap);
         $roomPercentages = $this->calculatePercentage($this->roomTotalMap);
+        $roomBudgets = $this->calculateBudget($this->roomTotalMap);
 
         // Step 5: Market Position Calculation
         $marketData = $this->getMarketDataForPropertyType($propertyType);
@@ -52,7 +54,9 @@ class BudgetCalculationService
                 number_format($maximumBudgetRounded)
             ),
             'workPercentages' => $workPercentages,
+            'workBudgets' => $workBudgets,
             'roomPercentages' => $roomPercentages,
+            'roomBudgets' => $roomBudgets,
             'marketPosition' => $position,
         ];
     }
@@ -72,6 +76,19 @@ class BudgetCalculationService
 
         return array_map(function ($value) use ($total) {
             return ($value / $total) * 100;
+        }, $data);
+    }
+
+    public function calculateBudget(array $data): array
+    {
+        $total = array_sum($data);
+
+        if ($total === 0) {
+            return array_map(fn () => 0, $data);
+        }
+
+        return array_map(function ($value) use ($total) {
+            return $value;
         }, $data);
     }
 

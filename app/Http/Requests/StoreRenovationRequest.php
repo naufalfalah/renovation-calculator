@@ -33,7 +33,6 @@ class StoreRenovationRequest extends FormRequest
             'number_of_rooms' => 'required|array',
             'number_of_rooms.*' => 'nullable|string|in:0,1,2,3,4,5+',
             'main' => 'required',
-            'additional' => 'nullable',
         ];
     }
 }
