@@ -473,7 +473,7 @@
 
             <div class="property-info">
                 <h3>Rooms to Renovate</h3>
-                @foreach ($roomLabels as $room)
+                @foreach ($room_labels as $room)
                     <p>
                         {{ $room }} @if (!$loop->last), @endif
                     </p>
@@ -482,7 +482,7 @@
 
             <div class="budget-info">
                 <h3>Your Estimated Renovation Budget</h3>
-                <div class="budget-amount">{{ $result['budgetRange'] }}</div>
+                <div class="budget-amount">{{ $result['budget_range'] }}</div>
             </div>
         </div>
 
@@ -603,26 +603,26 @@
         <div class="other-works">
             <div class="other-work-item">
                 <div class="other-work-title">Electrical Works</div>
-                <div class="other-work-level">{{ isset($otherWorks[1]) ? WorkPackageNameEnum::labelFromValue($otherWorks[1]->name) : '-' }}</div>
-                <div class="other-work-cost">{{ isset($otherWorks[1]) ? $otherWorks[1]->formatted_budget : '-' }}</div>
+                <div class="other-work-level">{{ isset($other_works[1]) ? WorkPackageNameEnum::labelFromValue($other_works[1]->name) : '-' }}</div>
+                <div class="other-work-cost">{{ isset($other_works[1]) ? $other_works[1]->formatted_budget : '-' }}</div>
             </div>
 
             <div class="other-work-item">
                 <div class="other-work-title">Glass & Aluminium</div>
-                <div class="other-work-level">{{ isset($otherWorks[2]) ? WorkPackageNameEnum::labelFromValue($otherWorks[2]->name) : '-' }}</div>
-                <div class="other-work-cost">{{ isset($otherWorks[2]) ? $otherWorks[2]->formatted_budget : '-' }}</div>
+                <div class="other-work-level">{{ isset($other_works[2]) ? WorkPackageNameEnum::labelFromValue($other_works[2]->name) : '-' }}</div>
+                <div class="other-work-cost">{{ isset($other_works[2]) ? $other_works[2]->formatted_budget : '-' }}</div>
             </div>
 
             <div class="other-work-item">
                 <div class="other-work-title">Painting</div>
-                <div class="other-work-level">{{ isset($otherWorks[3]) ? WorkPackageNameEnum::labelFromValue($otherWorks[3]->name) : '-' }}</div>
-                <div class="other-work-cost">{{ isset($otherWorks[3]) ? $otherWorks[3]->formatted_budget : '-' }}</div>
+                <div class="other-work-level">{{ isset($other_works[3]) ? WorkPackageNameEnum::labelFromValue($other_works[3]->name) : '-' }}</div>
+                <div class="other-work-cost">{{ isset($other_works[3]) ? $other_works[3]->formatted_budget : '-' }}</div>
             </div>
 
             <div class="other-work-item">
                 <div class="other-work-title">Cleaning & Polishing</div>
-                <div class="other-work-level">{{ isset($otherWorks[4]) ? WorkPackageNameEnum::labelFromValue($otherWorks[4]->name) : '-' }}</div>
-                <div class="other-work-cost">{{ isset($otherWorks[4]) ? $otherWorks[4]->formatted_budget : '-' }}</div>
+                <div class="other-work-level">{{ isset($other_works[4]) ? WorkPackageNameEnum::labelFromValue($other_works[4]->name) : '-' }}</div>
+                <div class="other-work-cost">{{ isset($other_works[4]) ? $other_works[4]->formatted_budget : '-' }}</div>
             </div>
         </div>
 
@@ -711,7 +711,7 @@
             </div>
 
             <div class="cost-info-box">
-                Your renovation budget of {{ $result['budgetRange'] }} falls within the lower-end range.
+                Your renovation budget of {{ $result['budget_range'] }} falls within the lower-end range.
             </div>
         </div>
 
@@ -763,11 +763,11 @@
                 <div class="pie-chart"></div>
 
                 <div class="chart-legend">
-                    @foreach ($result['workPercentages'] as $workType => $percentage)
+                    @foreach ($result['work_percentages'] as $workType => $percentage)
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #23263b;"></div>
                             <div class="legend-text">{{ WorkTypeEnum::labelFromValue($workType) }}</div>
-                            <div class="legend-value">{{ $percentage }}% (approx. {{ $result['workBudgets'][$workType] }})</div>
+                            <div class="legend-value">{{ $percentage }}% (approx. {{ $result['work_budgets'][$workType] }})</div>
                         </div>
                     @endforeach
                 </div>
@@ -781,11 +781,11 @@
                 <div class="pie-chart2"></div>
 
                 <div class="chart-legend">
-                    @foreach ($result['roomPercentages'] as $roomName => $percentage)
+                    @foreach ($result['room_percentages'] as $roomName => $percentage)
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #23263b;"></div>
                             <div class="legend-text">{{ $roomName }}</div>
-                            <div class="legend-value">{{ $percentage }}% (approx. {{ $result['roomBudgets'][$roomName] }})</div>
+                            <div class="legend-value">{{ $percentage }}% (approx. {{ $result['room_budgets'][$roomName] }})</div>
                         </div>
                     @endforeach
                 </div>

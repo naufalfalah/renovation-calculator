@@ -13,16 +13,16 @@ class ReportMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $reportData;
+    public $report;
 
     public $pdfContent;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($reportData, $pdfContent)
+    public function __construct($report, $pdfContent)
     {
-        $this->reportData = $reportData;
+        $this->report = $report;
         $this->pdfContent = $pdfContent;
     }
 
@@ -32,7 +32,7 @@ class ReportMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Report '.$this->reportData['number'],
+            subject: "[Jome] Here's Your Renovation Budget Report",
         );
     }
 
@@ -42,8 +42,8 @@ class ReportMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.report',
-            with: ['reportData' => $this->reportData],
+            view: 'email.report',
+            with: ['report' => $this->report],
         );
     }
 
@@ -55,7 +55,7 @@ class ReportMail extends Mailable
     public function attachments(): array
     {
         return [
-            Attachment::fromData(fn () => $this->pdfContent, 'report-'.$this->reportData['number'].'.pdf')
+            Attachment::fromData(fn () => $this->pdfContent, 'Renovation Budget Report.pdf')
                 ->withMime('application/pdf'),
         ];
     }

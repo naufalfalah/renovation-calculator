@@ -6,13 +6,16 @@ use App\Enums\BaseUnitEnum;
 use App\Enums\PropertyStatusEnum;
 use App\Enums\PropertyTypeEnum;
 use App\Http\Requests\StoreRenovationRequest;
+use App\Mail\ReportMail;
 use App\Models\OtherWork;
 use App\Models\OtherWorkPackage;
+use App\Models\Renovation;
 use App\Models\Room;
 use App\Models\Work;
 use App\Models\WorkPackage;
 use App\Services\BudgetCalculationService;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class RenovationController extends Controller
 {
@@ -43,40 +46,16 @@ class RenovationController extends Controller
     {
         // dd($request->all());
 
-        // TODO: Save to DB
-        // Renovation::create([
-        //     'property_type' => $request->property_type,
-        //     'property_status' => $request->property_status,
-        //     'base_unit' => $request->base_unit,
-        //     'size' => $request->size,
-        //     'main' => $request->main,
-        //     'additional' => $request->additional,
-        // ]);
-
         $propertyType = $request->property_type;
+        $propertyStatus = $request->property_status;
         $main = $request->main;
         $additional = $request->additional;
+        $email = $request->email;
 
         $rooms = array_keys($main);
         $roomLabels = [];
         foreach ($rooms as $key => $value) {
             $roomLabels[] = ucfirst(strtolower($value));
-        }
-
-        $works = [];
-        foreach ($main as $room) {
-            foreach ($room as $workId => $workPackageId) {
-                $workPackage = WorkPackage::find($workPackageId);
-                $works[$workId] = $workPackage;
-            }
-        }
-
-        $otherWorks = [];
-        if ($additional) {
-            foreach ($additional as $otherWorkId => $otherWorkPackageId) {
-                $otherWorkPackage = OtherWorkPackage::find($otherWorkPackageId);
-                $otherWorks[$otherWorkId] = $otherWorkPackage;
-            }
         }
 
         $userSelection = [];
@@ -108,6 +87,22 @@ class RenovationController extends Controller
         $result = $this->service->calculate($propertyType, $userSelection);
         // dd($result);
 
+        $works = [];
+        foreach ($main as $room) {
+            foreach ($room as $workId => $workPackageId) {
+                $workPackage = WorkPackage::find($workPackageId);
+                $works[$workId] = $workPackage;
+            }
+        }
+
+        $otherWorks = [];
+        if ($additional) {
+            foreach ($additional as $otherWorkId => $otherWorkPackageId) {
+                $otherWorkPackage = OtherWorkPackage::find($otherWorkPackageId);
+                $otherWorks[$otherWorkId] = $otherWorkPackage;
+            }
+        }
+
         $report = [
             'date' => date('jS F Y'),
             'property_type' => $propertyType,
@@ -116,21 +111,42 @@ class RenovationController extends Controller
             'size' => $request->size,
             'number_of_rooms' => $request->number_of_rooms,
             'rooms' => $request->rooms,
-            'roomLabels' => $roomLabels,
+            'room_labels' => $roomLabels,
+            'main' => $main,
             'works' => $works,
-            'otherWorks' => $otherWorks,
-            'fullName' => 'Naufal',
-            'email' => 'naufalfallah@gmail.com',
-            'countryCode' => '+65',
-            'contactNumber' => '861351',
-            'shortlistDesigners' => 'on',
-            'acceptTerms' => 'on',
+            'other_works' => $otherWorks,
+            'full_name' => 'Naufal',
+            'email' => $email,
+            'country_code' => $request->country_code,
+            'contact_number' => $request->contact_number,
+            'shortlist_designers' => 'on',
+            'accept_terms' => 'on',
             'result' => $result,
         ];
         // dd($report);
 
-        $pdf = Pdf::loadView('pdf.report', $report);
+        Renovation::create([
+            'property_type' => $propertyType,
+            'property_status' => $propertyStatus,
+            'base_unit' => $request->base_unit,
+            'size' => $request->size,
+            // 'main' => $request->main,
+            // 'additional' => $request->additional,
+        ]);
 
-        return $pdf->stream('Renovation Budget Report.pdf');
+        $pdf = Pdf::loadView('pdf.report', $report);
+        $pdfContent = $pdf->output();
+
+        Mail::to($email)->send(new ReportMail($report, $pdfContent));
+
+        // return $pdf->stream('report.pdf');
+        return response()->json([
+            'success' => true,
+            'message' => 'Email berhasil dikirim dengan PDF!',
+            'data' => [
+                'email' => $email,
+                'budget_range' => $result['budget_range'],
+            ],
+        ]);
     }
 }

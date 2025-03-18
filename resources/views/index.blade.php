@@ -246,7 +246,7 @@
 
                     <div class="form-group">
                         <label for="fullName">Full Name</label>
-                        <input type="text" id="fullName" name="fullName" required>
+                        <input type="text" id="fullName" name="full_name" required>
                     </div>
 
                     <div class="form-group">
@@ -257,21 +257,21 @@
                     <div class="form-group">
                         <label for="contactNumber">Contact Number</label>
                         <div class="phone-input">
-                            <select name="countryCode" id="countryCode">
+                            <select name="country_code" id="countryCode">
                                 <option value="+65">+65 (Singapore)</option>
                                 <option value="+62">+62 (Indonesia)</option>
                             </select>
-                            <input type="tel" id="contactNumber" name="contactNumber" required>
+                            <input type="tel" id="contactNumber" name="contact_number" required>
                         </div>
                         <div id="contactNumberGroupError"></div>
                     </div>
 
                     <div class="form-group checkbox-group">
-                        <label><input type="checkbox" name="shortlistDesigners"> Get a shortlist of Interior Designers</label>
+                        <label><input type="checkbox" name="shortlist_designers"> Get a shortlist of Interior Designers</label>
                     </div>
 
                     <div class="form-group checkbox-group">
-                        <label><input type="checkbox" name="acceptTerms" required> I accept the terms of service</label>
+                        <label><input type="checkbox" name="accept_terms" required> I accept the terms of service</label>
                     </div>
 
                     <div class="error-container"></div>
@@ -285,13 +285,12 @@
                     <h2>Step 9: Results</h2>
 
                     <p><strong>Your Estimated Budget Range:</strong></p>
-                    <p id="budgetRangeDisplay">$<span class="lower-bound-budget"></span> - $<span class="upper-bound-budget"></span></p> <!-- This can be dynamically updated with JS -->
+                    <p id="budgetRangeDisplay"></p>
 
                     <p>A confirmation email with the PDF report has been sent to <strong
                             id="userEmailDisplay"></strong>.</p>
 
                     <div id="nextSteps">
-                        <!-- Conditional next steps based on user choices -->
                         <p>Our team will reach out with a shortlist of Interior Designers shortly.</p>
                     </div>
 

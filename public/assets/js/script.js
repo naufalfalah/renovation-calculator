@@ -18,12 +18,11 @@ function showStep(step) {
 
 function nextStep() {
     const totalSteps = document.querySelectorAll('.form-step').length;
-    currentStep++;
-
     if (currentStep === totalSteps) {
-        // alert("You've reached the final step!");
+        console.log("You've reached the final step!");
         return;
     }
+    currentStep++;
 
     if (currentStep === 3) {
         const step2 = document.querySelector('[data-step="2"]');
@@ -400,7 +399,7 @@ function validateContactInfo() {
     const email = document.getElementById('email');
     const countryCode = document.getElementById('countryCode');
     const contactNumber = document.getElementById('contactNumber');
-    const acceptTerms = document.querySelector('input[name="acceptTerms"]');
+    const acceptTerms = document.querySelector('input[name="accept_terms"]');
     const contactNumberGroupError = document.getElementById('contactNumberGroupError');
 
     // Clear all previous error highlights
@@ -443,23 +442,35 @@ document.querySelector('[data-step="8"] .submit-btn').addEventListener('click', 
 
     if (validateContactInfo()) {
         console.log('Contact Info Valid ✅');
-        document.querySelector('#renovationForm').submit();
+
+        const form = document.querySelector('#renovationForm');
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(response => {
+            if (response.success) {
+                console.log('Submit Success 🎉');
+
+                document.querySelector('#budgetRangeDisplay').textContent = response.data.budget_range;
+                document.querySelector('#userEmailDisplay').textContent = response.data.email;
+
+                console.log("nextStep")
+                nextStep();
+            } else {
+                console.log('Submit Failed ❌', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     } else {
         console.log('Contact Info Not Valid ❌');
     }
 });
-
-// function generateReport() {
-//     console.log('Generating report...');
-
-//     setTimeout(() => {
-//       console.log('Report generated successfully.');
-
-//       nextStep(9);
-//     }, 1000);
-// }
-
-// document.getElementById('generateReportBtn').addEventListener('click', generateReport);
 
 function restart() {
     location.reload();

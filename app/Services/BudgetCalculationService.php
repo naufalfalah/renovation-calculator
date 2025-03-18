@@ -48,16 +48,16 @@ class BudgetCalculationService
         $maximumBudgetRounded = round($this->lowerBoundTotal + ($this->upperBoundTotal * 0.6));
 
         return [
-            'budgetRange' => sprintf(
+            'budget_range' => sprintf(
                 '$%s - $%s',
                 number_format($minimumBudgetRounded),
                 number_format($maximumBudgetRounded)
             ),
-            'workPercentages' => $workPercentages,
-            'workBudgets' => $workBudgets,
-            'roomPercentages' => $roomPercentages,
-            'roomBudgets' => $roomBudgets,
-            'marketPosition' => $position,
+            'work_percentages' => $workPercentages,
+            'work_budgets' => $workBudgets,
+            'room_percentages' => $roomPercentages,
+            'room_budgets' => $roomBudgets,
+            'market_position' => $position,
         ];
     }
 
