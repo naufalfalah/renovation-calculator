@@ -4,7 +4,7 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "format:blade": "blade-formatter resources/views --write",
+        "format:blade": "blade-formatter 'resources/views/**/*.blade.php' --write",
         "format": "pint && blade-formatter resources/views --write"
     },
     "devDependencies": {
