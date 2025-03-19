@@ -258,10 +258,9 @@
                         <label for="contactNumber">Contact Number</label>
                         <div class="phone-input">
                             <select name="country_code" id="countryCode">
-                                <option value="+65">+65 (Singapore)</option>
-                                <option value="+62">+62 (Indonesia)</option>
+                                <option value="+65">+65 (SG)</option>
                             </select>
-                            <input type="tel" id="contactNumber" name="contact_number" required>
+                            <input type="tel" id="contactNumber" name="contact_number" maxlength="8" required>
                         </div>
                         <div id="contactNumberGroupError"></div>
                     </div>

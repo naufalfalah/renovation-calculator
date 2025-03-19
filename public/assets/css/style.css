@@ -190,17 +190,37 @@ select:focus {
     outline: none;
 }
 
+#countryCode {
+    margin: 0;
+}
+
 .phone-input {
     display: flex;
     gap: 0.5rem;
 }
 
-.phone-input select {
+.phone-input select,
+.phone-input input[type="tel"] {
     flex: 1;
+    height: 48px; /* Sesuaikan tinggi supaya sama */
+    padding: 0.75rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    appearance: none; /* Untuk hilangkan style default select di beberapa browser */
+    background-color: #fff; /* Tambahan biar konsisten */
 }
 
 .phone-input input[type="tel"] {
     flex: 2;
+}
+
+.phone-input select:focus,
+.phone-input input[type="tel"]:focus {
+    border-color: #2d89ef;
+    box-shadow: 0 0 5px rgba(45, 137, 239, 0.3);
+    outline: none;
 }
 
 .checkbox-group label {

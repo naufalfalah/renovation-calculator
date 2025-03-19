@@ -57,7 +57,6 @@ function nextStep() {
 
         if (checkboxes.length > 0 && !checkboxes[3].checked) {
             currentStep++;
-            return;
         }
     }
 
@@ -77,7 +76,6 @@ function prevStep() {
 
         if (checkboxes.length > 0 && !checkboxes[3].checked) {
             currentStep--;
-            return;
         }
     }
 
@@ -127,6 +125,14 @@ function showError(element, message) {
     element.appendChild(error);
 }
 
+function clearFieldErrors(elements) {
+    elements.forEach(el => {
+        el.classList.remove('error-input');
+        const errors = el.querySelectorAll('.error-message');
+        errors.forEach(error => error.remove());
+    });
+}
+
 // Step 1
 document.addEventListener('DOMContentLoaded', function () {
     const nextBtn1 = document.querySelector('.next-btn#nextBtn1');
@@ -172,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 const roomSelects = document.querySelectorAll('select[name^="number_of_rooms"]');
+
 roomSelects.forEach(select => {
     select.addEventListener('change', function () {
         const roomId = this.getAttribute('id').replace('number_of_room_', '');
@@ -183,12 +190,22 @@ roomSelects.forEach(select => {
             if (selectedValue === '0' || selectedValue === '') {
                 relatedCheckbox.disabled = true;
                 relatedCheckbox.checked = false;
+
+                relatedCheckbox.removeEventListener('click', preventUncheck);
             } else {
                 relatedCheckbox.disabled = false;
+                relatedCheckbox.checked = true;
+
+                relatedCheckbox.addEventListener('click', preventUncheck);
             }
         }
     });
 });
+
+function preventUncheck(e) {
+    e.preventDefault();
+    this.checked = true;
+}
 
 // Step 2
 document.addEventListener('DOMContentLoaded', function () {
@@ -377,19 +394,8 @@ function validateEmail(email) {
 
 // Validate phone number (basic numeric check)
 function validatePhone(phone) {
-    const re = /^[0-9]{6,15}$/; // Customize min-max length as needed
+    const re = /^[89]\d{7}$/;
     return re.test(phone);
-}
-
-// Remove previous error highlights
-function clearFieldErrors(elements) {
-    elements.forEach(el => {
-        el.classList.remove('error-input');
-        const small = el.parentNode.querySelector('small');
-        if (small) {
-            el.parentNode.removeChild(small);
-        }
-    });
 }
 
 function validateContactInfo() {
@@ -402,32 +408,33 @@ function validateContactInfo() {
     const acceptTerms = document.querySelector('input[name="accept_terms"]');
     const contactNumberGroupError = document.getElementById('contactNumberGroupError');
 
-    // Clear all previous error highlights
-    clearFieldErrors([fullName, email, contactNumber, countryCode]);
-
-    // Error container
-    const errorContainer = document.querySelector('[data-step="8"] .error-container');
-    errorContainer.innerHTML = '';
+    const errorMessages = document.querySelectorAll('[data-step="8"] .error-message');
+    errorMessages.forEach(msg => msg.remove());
 
     if (fullName.value.trim() === '') {
         showError(fullName.parentElement, 'Full name is required.');
         isValid = false;
     }
 
-    if (!validateEmail(email.value)) {
+    if (email.value.trim() === '') {
+        showError(email.parentElement, 'Email is required.');
+        isValid = false;
+    } else if (!validateEmail(email.value)) {
         showError(email.parentElement, 'Please enter a valid email address.');
         isValid = false;
     }
 
-    if (countryCode.value.trim() === '') {
-        showError(contactNumberGroupError, 'Please select a country code.');
+    if (contactNumber.value.trim() === '') {
+        showError(contactNumberGroupError, 'Contact number is required.');
+        isValid = false;
+    } else if (!validatePhone(contactNumber.value)) {
+        showError(contactNumberGroupError, 'Contact number must be 8 digits and start with 8 or 9.');
         isValid = false;
     }
 
-    if (contactNumber.value.trim() === '') {
-        showError(contactNumberGroupError, 'Please enter a valid contact number.');
-        isValid = false;
-    }
+    // Error container
+    const errorContainer = document.querySelector('[data-step="8"] .error-container');
+    errorContainer.innerHTML = '';
 
     if (!acceptTerms.checked) {
         errorContainer.innerHTML += `<p style="color:red;">You must accept the terms of service.</p>`;
@@ -436,6 +443,23 @@ function validateContactInfo() {
 
     return isValid;
 }
+
+// Realtime validation for inputs
+const fullNameInput = document.getElementById('fullName');
+const emailInput = document.getElementById('email');
+const contactNumberInput = document.getElementById('contactNumber');
+
+fullNameInput.addEventListener('input', () => {
+    validateContactInfo();
+});
+
+emailInput.addEventListener('input', () => {
+    validateContactInfo();
+});
+
+contactNumberInput.addEventListener('input', () => {
+    validateContactInfo();
+});
 
 document.querySelector('[data-step="8"] .submit-btn').addEventListener('click', function (e) {
     e.preventDefault();
