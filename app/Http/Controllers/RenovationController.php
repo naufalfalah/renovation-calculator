@@ -16,6 +16,7 @@ use App\Models\WorkPackage;
 use App\Services\BudgetCalculationService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
+require_once base_path('vendor/ianw/quickchart/QuickChart.php');
 
 class RenovationController extends Controller
 {
@@ -134,12 +135,61 @@ class RenovationController extends Controller
             // 'additional' => $request->additional,
         ]);
 
+        $chartFolder = public_path('chart');
+        if (!file_exists($chartFolder)) {
+            mkdir($chartFolder, 0777, true);
+        }
+
+        $qcWork = new \QuickChart();
+        $qcWork->setWidth(500);
+        $qcWork->setHeight(300);
+        $qcWork->setFormat('png');
+
+        $qcWork->setConfig(json_encode([
+            'type' => 'pie',
+            'data' => [
+                'labels' => array_keys($report['result']['work_percentages']),
+                'datasets' => [[
+                    'data' => array_values($report['result']['work_percentages']),
+                    'backgroundColor' => $report['result']['work_colors'],
+                ]]
+            ]
+        ]));
+
+        $workChartName = 'work_chart_' . date('Y-m-d H:i:s') . '.png';
+        $workChartPath = public_path($workChartName);
+        $roomChartPath = $chartFolder . '/' . $workChartName;
+        file_put_contents($workChartPath, $qcWork->toBinary());
+
+        // Room Chart
+        $qcRoom = new \QuickChart();
+        $qcRoom->setWidth(500);
+        $qcRoom->setHeight(300);
+        $qcRoom->setFormat('png');
+
+        $qcRoom->setConfig(json_encode([
+            'type' => 'pie',
+            'data' => [
+                'labels' => array_keys($report['result']['room_percentages']),
+                'datasets' => [[
+                    'data' => array_values($report['result']['room_percentages']),
+                    'backgroundColor' => array_slice($report['result']['room_colors'], 0, count($report['result']['room_percentages'])),
+                ]]
+            ]
+        ]));
+
+        $roomChartName = 'room_chart_' . date('Y-m-d H:i:s') . '.png';
+        $roomChartPath = $chartFolder . '/' . $roomChartName;
+        file_put_contents($roomChartPath, $qcRoom->toBinary());
+
+        $report['work_image_path'] = $workChartPath;
+        $report['room_image_path'] = $roomChartPath;
+
         $pdf = Pdf::loadView('pdf.report', $report);
         $pdfContent = $pdf->output();
 
         Mail::to($email)->send(new ReportMail($report, $pdfContent));
 
-        // return $pdf->stream('report.pdf');
         return response()->json([
             'success' => true,
             'message' => 'Email berhasil dikirim dengan PDF!',
@@ -148,5 +198,227 @@ class RenovationController extends Controller
                 'budget_range' => $result['budget_range'],
             ],
         ]);
+    }
+
+    public function pdf()
+    {
+        $report = [
+            'date' => date('jS F Y'),
+            'property_type' => 'hdb',
+            'property_status' => 'new',
+            'number_of_rooms' => [
+                3 => 1,
+                4 => 1,
+            ],
+            'rooms' => [],
+            'room_labels' => [],
+            'shortlist_designers' => 'on',
+            'accept_terms' => 'on',
+            'result' => [
+                "budget_range" => "$10,040 - $14,060",
+                "work_percentages" => [
+                    "Hacking" => 4.0,
+                    "Masonry" => 28.0,
+                    "Carpentry" => 4.0,
+                    "Ceiling & Partition" => 4.0,
+                    "Plumbing" => 4.0,
+                    "Electrical" => 14.67,
+                    "Painting" => 14.67,
+                    "Glass & Aluminium" => 21.33,
+                    "Cleaning & Polishing" => 5.33,
+                ],
+                "work_budgets" => [
+                    "Hacking" => 4.0,
+                    "Masonry" => 28.0,
+                    "Carpentry" => 4.0,
+                    "Ceiling & Partition" => 4.0,
+                    "Plumbing" => 4.0,
+                    "Electrical" => 14.67,
+                    "Painting" => 14.67,
+                    "Glass & Aluminium" => 21.33,
+                    "Cleaning & Polishing" => 5.33,
+                ],
+                "room_percentages" => [
+                    "Living/Dining" => 25.0,
+                    "Kitchen" => 25.0,
+                    "Bedroom" => 25.0,
+                    "Bathroom" => 25.0,
+                ],
+                "room_budgets" => [
+                    "Living/Dining" => 25.0,
+                    "Kitchen" => 25.0,
+                    "Bedroom" => 25.0,
+                    "Bathroom" => 25.0,
+                ],
+                "market_position" => "lower-end range",
+            ],
+        ];
+
+        $qcWork = new \QuickChart();
+        $qcWork->setWidth(500);
+        $qcWork->setHeight(300);
+        $qcWork->setFormat('png');
+
+        $qcWork->setConfig(json_encode([
+            'type' => 'pie',
+            'data' => [
+                'labels' => array_keys($report['result']['work_percentages']),
+                'datasets' => [[
+                    'data' => array_values($report['result']['work_percentages']),
+                    'backgroundColor' => $report['result']['work_colors'],
+                ]]
+            ]
+        ]));
+
+        $chartFolder = public_path('chart');
+
+        if (!file_exists($chartFolder)) {
+            mkdir($chartFolder, 0777, true);
+        }
+
+        $workChartName = 'work_chart_' . date('Y-m-d H:i:s') . '.png';
+        $workChartPath = public_path($workChartName);
+        $roomChartPath = $chartFolder . '/' . $workChartName;
+        file_put_contents($workChartPath, $qcWork->toBinary());
+
+        // Room Chart
+        $qcRoom = new \QuickChart();
+        $qcRoom->setWidth(500);
+        $qcRoom->setHeight(300);
+        $qcRoom->setFormat('png');
+
+        $qcRoom->setConfig(json_encode([
+            'type' => 'pie',
+            'data' => [
+                'labels' => array_keys($report['result']['room_percentages']),
+                'datasets' => [[
+                    'data' => array_values($report['result']['room_percentages']),
+                    'backgroundColor' => array_slice($report['result']['room_colors'], 0, count($report['result']['room_percentages'])),
+                ]]
+            ]
+        ]));
+
+        $roomChartName = 'room_chart_' . date('Y-m-d H:i:s') . '.png';
+        $roomChartPath = $chartFolder . '/' . $roomChartName;
+        file_put_contents($roomChartPath, $qcRoom->toBinary());
+
+        $report['work_image_path'] = $workChartPath;
+        $report['room_image_path'] = $roomChartPath;
+
+        // Generate PDF
+        $pdf = Pdf::loadView('pdf.report', $report);
+
+        return $pdf->stream('report.pdf');
+    }
+
+    public function web()
+    {
+        $report = [
+            'date' => date('jS F Y'),
+            'property_type' => 'hdb',
+            'property_status' => 'new',
+            'number_of_rooms' => [
+                3 => 1,
+                4 => 1,
+            ],
+            'rooms' => [],
+            'room_labels' => [],
+            'shortlist_designers' => 'on',
+            'accept_terms' => 'on',
+            'result' => [
+                "budget_range" => "$10,040 - $14,060",
+                "work_percentages" => [
+                    "Hacking" => 4.0,
+                    "Masonry" => 28.0,
+                    "Carpentry" => 4.0,
+                    "Ceiling & Partition" => 4.0,
+                    "Plumbing" => 4.0,
+                    "Electrical" => 14.67,
+                    "Painting" => 14.67,
+                    "Glass & Aluminium" => 21.33,
+                    "Cleaning & Polishing" => 5.33,
+                ],
+                "work_budgets" => [
+                    "Hacking" => 4.0,
+                    "Masonry" => 28.0,
+                    "Carpentry" => 4.0,
+                    "Ceiling & Partition" => 4.0,
+                    "Plumbing" => 4.0,
+                    "Electrical" => 14.67,
+                    "Painting" => 14.67,
+                    "Glass & Aluminium" => 21.33,
+                    "Cleaning & Polishing" => 5.33,
+                ],
+                "room_percentages" => [
+                    "Living/Dining" => 25.0,
+                    "Kitchen" => 25.0,
+                    "Bedroom" => 25.0,
+                    "Bathroom" => 25.0,
+                ],
+                "room_budgets" => [
+                    "Living/Dining" => 25.0,
+                    "Kitchen" => 25.0,
+                    "Bedroom" => 25.0,
+                    "Bathroom" => 25.0,
+                ],
+                "market_position" => "lower-end range",
+            ],
+        ];
+
+        $chartFolder = public_path('chart');
+
+        if (!file_exists($chartFolder)) {
+            mkdir($chartFolder, 0777, true);
+        }
+
+        $qcWork = new \QuickChart();
+        $qcWork->setWidth(500);
+        $qcWork->setHeight(300);
+        $qcWork->setFormat('png');
+
+        $qcWork->setConfig(json_encode([
+            'type' => 'pie',
+            'data' => [
+                'labels' => array_keys($report['result']['work_percentages']),
+                'datasets' => [[
+                    'data' => array_values($report['result']['work_percentages']),
+                    'backgroundColor' => [
+                        '#3498db', '#e84393', '#f1c40f', '#2ecc71',
+                        '#9b59b6', '#34495e', '#16a085', '#d35400', '#c0392b'
+                    ],
+                ]]
+            ]
+        ]));
+
+        $workChartName = 'work_chart' . date('Y-m-d H:i:s') . '.png';
+        $workChartPath = $chartFolder . '/' . $workChartName;
+        file_put_contents($workChartPath, $qcWork->toBinary());
+
+        // Room Chart
+        $qcRoom = new \QuickChart();
+        $qcRoom->setWidth(500);
+        $qcRoom->setHeight(300);
+        $qcRoom->setFormat('png');
+
+        $qcRoom->setConfig(json_encode([
+            'type' => 'pie',
+            'data' => [
+                'labels' => array_keys($report['result']['room_percentages']),
+                'datasets' => [[
+                    'data' => array_values($report['result']['room_percentages']),
+                    'backgroundColor' => [
+                        '#e67e22', '#e74c3c', '#8e44ad', '#3498db'
+                    ],
+                ]]
+            ]
+        ]));
+
+        $roomChartPath = public_path('room_chart.png');
+        file_put_contents($roomChartPath, $qcRoom->toBinary());
+
+        $report['work_image_path'] = $workChartPath;
+        $report['room_image_path'] = 'room_chart.png';
+
+        return view('pdf.report', $report);
     }
 }
