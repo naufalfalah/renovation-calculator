@@ -111,6 +111,9 @@
                                 {{ $package->description ?? '' }}
                             </label><br />
                             @endforeach
+                            <button type="button" class="clear-selection" data-target="main[living][{{ $work->id }}]">
+                                Clear Selection
+                            </button>
                         </div>
                     @endforeach
 
@@ -141,6 +144,9 @@
                                 {{ $package->description ?? '' }}
                             </label><br />
                             @endforeach
+                            <button type="button" class="clear-selection" data-target="main[kitchen][{{ $work->id }}]">
+                                Clear Selection
+                            </button>
                         </div>
                     @endforeach
 
@@ -171,6 +177,9 @@
                                 {{ $package->description ?? '' }}
                             </label><br />
                             @endforeach
+                            <button type="button" class="clear-selection" data-target="main[bedroom][{{ $work->id }}]">
+                                Clear Selection
+                            </button>
                         </div>
                     @endforeach
 
@@ -201,6 +210,9 @@
                                 {{ $package->description ?? '' }}
                             </label><br />
                             @endforeach
+                            <button type="button" class="clear-selection" data-target="main[bathroom][{{ $work->id }}]">
+                                Clear Selection
+                            </button>
                         </div>
                     @endforeach
 
@@ -230,6 +242,9 @@
                                 {{ $package->description ?? '' }}
                             </label><br />
                             @endforeach
+                            <button type="button" class="clear-selection" data-target="additional[{{ $work->id }}]">
+                                Clear Selection
+                            </button>
                         </div>
                     @endforeach
 

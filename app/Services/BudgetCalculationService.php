@@ -13,6 +13,15 @@ class BudgetCalculationService
 
     protected array $roomTotalMap = [];
 
+    protected array $workColors = [
+        '#3498db', '#e84393', '#f1c40f', '#2ecc71',
+        '#9b59b6', '#34495e', '#16a085', '#d35400', '#c0392b'
+    ];
+
+    protected array $roomColors = [
+        '#e67e22', '#e74c3c', '#8e44ad', '#3498db'
+    ];
+
     public function calculate(string $propertyType, array $userSelections): array
     {
         // Step 2 & 3: Process Room-Specific Selections & Additional Works
@@ -55,8 +64,10 @@ class BudgetCalculationService
             ),
             'work_percentages' => $workPercentages,
             'work_budgets' => $workBudgets,
+            'work_colors' => array_slice($this->workColors, 0, count($workPercentages)),
             'room_percentages' => $roomPercentages,
             'room_budgets' => $roomBudgets,
+            'room_colors' => array_slice($this->roomColors, 0, count($roomPercentages)),
             'market_position' => $position,
         ];
     }

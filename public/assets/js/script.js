@@ -18,7 +18,7 @@ function showStep(step) {
 
 function nextStep() {
     const totalSteps = document.querySelectorAll('.form-step').length;
-    if (currentStep === totalSteps) {
+    if (currentStep >= totalSteps) {
         console.log("You've reached the final step!");
         return;
     }
@@ -64,11 +64,10 @@ function nextStep() {
 }
 
 function prevStep() {
-    currentStep--;
-
-    if (currentStep === 1) {
+    if (currentStep <= 1) {
         return;
     }
+    currentStep--;
 
     if (currentStep === 6) {
         const step2 = document.querySelector('[data-step="2"]');
@@ -132,6 +131,15 @@ function clearFieldErrors(elements) {
         errors.forEach(error => error.remove());
     });
 }
+
+document.querySelectorAll('.clear-selection').forEach(button => {
+    button.addEventListener('click', function () {
+        const name = this.getAttribute('data-target');
+        document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+            radio.checked = false;
+        });
+    });
+});
 
 // Step 1
 document.addEventListener('DOMContentLoaded', function () {

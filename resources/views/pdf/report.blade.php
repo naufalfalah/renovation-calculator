@@ -601,25 +601,25 @@
         <div class="section-header" style="border-radius: 30px;">Other Additional Works</div>
 
         <div class="other-works">
-            <div class="other-work-item">
+            <div class="other-work-item" style="display: inline-block;">
                 <div class="other-work-title">Electrical Works</div>
                 <div class="other-work-level">{{ isset($other_works[1]) ? WorkPackageNameEnum::labelFromValue($other_works[1]->name) : '-' }}</div>
                 <div class="other-work-cost">{{ isset($other_works[1]) ? $other_works[1]->formatted_budget : '-' }}</div>
             </div>
 
-            <div class="other-work-item">
+            <div class="other-work-item" style="display: inline-block;">
                 <div class="other-work-title">Glass & Aluminium</div>
                 <div class="other-work-level">{{ isset($other_works[2]) ? WorkPackageNameEnum::labelFromValue($other_works[2]->name) : '-' }}</div>
                 <div class="other-work-cost">{{ isset($other_works[2]) ? $other_works[2]->formatted_budget : '-' }}</div>
             </div>
 
-            <div class="other-work-item">
+            <div class="other-work-item" style="display: inline-block;">
                 <div class="other-work-title">Painting</div>
                 <div class="other-work-level">{{ isset($other_works[3]) ? WorkPackageNameEnum::labelFromValue($other_works[3]->name) : '-' }}</div>
                 <div class="other-work-cost">{{ isset($other_works[3]) ? $other_works[3]->formatted_budget : '-' }}</div>
             </div>
 
-            <div class="other-work-item">
+            <div class="other-work-item" style="display: inline-block;">
                 <div class="other-work-title">Cleaning & Polishing</div>
                 <div class="other-work-level">{{ isset($other_works[4]) ? WorkPackageNameEnum::labelFromValue($other_works[4]->name) : '-' }}</div>
                 <div class="other-work-cost">{{ isset($other_works[4]) ? $other_works[4]->formatted_budget : '-' }}</div>
@@ -683,21 +683,21 @@
             </div>
 
             <div class="cost-range">
-                <div class="cost-range-item">
+                <div class="cost-range-item" style="display: inline-block;">
                     <div class="cost-range-box">
                         <div class="cost-range-title">Lower-end</div>
                         <div class="cost-range-amount">$27,000</div>
                     </div>
                 </div>
 
-                <div class="cost-range-item">
+                <div class="cost-range-item" style="display: inline-block;">
                     <div class="cost-range-box">
                         <div class="cost-range-title">Average</div>
                         <div class="cost-range-amount">$45,000</div>
                     </div>
                 </div>
 
-                <div class="cost-range-item">
+                <div class="cost-range-item" style="display: inline-block;">
                     <div class="cost-range-box">
                         <div class="cost-range-title">Higher-end</div>
                         <div class="cost-range-amount">$72,000</div>
@@ -755,38 +755,50 @@
 
         <!-- Budget Breakdowns -->
         <div class="charts-container">
-            <div class="chart-section">
+            <div class="chart-section" style="width: 100%; margin-bottom 50px;">
                 <div class="chart-title">Budget Breakdown by Works</div>
                 <div class="chart-description">Here's the budget breakdown allocated for each work required.</div>
 
                 <!-- Pie Chart for Works -->
-                <div class="pie-chart"></div>
+                <img src="{{ $work_image_path ?? '' }}" alt="Work Chart" style="width: 100%; height: auto;" />
 
                 <div class="chart-legend">
+                    @php
+                        $colorIndex = 0;
+                    @endphp
                     @foreach ($result['work_percentages'] as $workType => $percentage)
                         <div class="legend-item">
-                            <div class="legend-color" style="background-color: #23263b;"></div>
-                            <div class="legend-text">{{ WorkTypeEnum::labelFromValue($workType) }}</div>
-                            <div class="legend-value">{{ $percentage }}% (approx. {{ $result['work_budgets'][$workType] }})</div>
+                            <div class="legend-color" style="background-color: {{ $result['work_colors'][$colorIndex] }}; display: inline-block;"></div>
+                            <div class="legend-text" style="display: inline-block;">{{ WorkTypeEnum::labelFromValue($workType) }}</div>
+                            <div class="legend-value" style="display: inline-block; width: auto;">{{ number_format($percentage, 2) }}% (approx. {{ $result['work_budgets'][$workType] }})</div>
                         </div>
+                        @php
+                            $colorIndex++;
+                        @endphp
                     @endforeach
                 </div>
             </div>
 
-            <div class="chart-section">
+            <div class="chart-section" style="width: 100%">
                 <div class="chart-title">Budget Breakdown by Room Type</div>
                 <div class="chart-description">Here's the budget breakdown allocated for each room.</div>
 
                 <!-- Pie Chart for Room Type -->
-                <div class="pie-chart2"></div>
+                <img src="{{ $room_image_path ?? '' }}" alt="Room Chart" style="width: 100%; height: auto;" />
 
                 <div class="chart-legend">
+                    @php
+                        $colorIndex = 0;
+                    @endphp
                     @foreach ($result['room_percentages'] as $roomName => $percentage)
                         <div class="legend-item">
-                            <div class="legend-color" style="background-color: #23263b;"></div>
-                            <div class="legend-text">{{ $roomName }}</div>
-                            <div class="legend-value">{{ $percentage }}% (approx. {{ $result['room_budgets'][$roomName] }})</div>
+                            <div class="legend-color" style="background-color: {{ $result['room_colors'][$colorIndex] }}; display: inline-block;"></div>
+                            <div class="legend-text" style="display: inline-block;">{{ $roomName }}</div>
+                            <div class="legend-value" style="display: inline-block;">{{ number_format($percentage, 2) }}% (approx. {{ $result['room_budgets'][$roomName] }})</div>
                         </div>
+                        @php
+                            $colorIndex++;
+                        @endphp
                     @endforeach
                 </div>
             </div>
@@ -842,7 +854,7 @@
         <div class="hacks-container">
             <div class="hack-item">
                 <div class="hack-title">
-                    <div class="hack-icon"></div>
+                    <div class="hack-icon" style="display: inline-block;"></div>
                     Renovation Packages
                 </div>
                 <div class="hack-description">
@@ -854,7 +866,7 @@
 
             <div class="hack-item">
                 <div class="hack-title">
-                    <div class="hack-icon"></div>
+                    <div class="hack-icon" style="display: inline-block;"></div>
                     Electrical Wiring
                 </div>
                 <div class="hack-description">
@@ -866,7 +878,7 @@
 
             <div class="hack-item">
                 <div class="hack-title">
-                    <div class="hack-icon"></div>
+                    <div class="hack-icon" style="display: inline-block;"></div>
                     Carpentry
                 </div>
                 <div class="hack-description">
@@ -878,7 +890,7 @@
 
             <div class="hack-item">
                 <div class="hack-title">
-                    <div class="hack-icon"></div>
+                    <div class="hack-icon" style="display: inline-block;"></div>
                     Hacking
                 </div>
                 <div class="hack-description">
@@ -890,7 +902,7 @@
 
             <div class="hack-item flooring-hack">
                 <div class="hack-title">
-                    <div class="hack-icon"></div>
+                    <div class="hack-icon" style="display: inline-block;"></div>
                     Flooring
                 </div>
                 <div class="hack-description">
