@@ -157,8 +157,7 @@ class RenovationController extends Controller
         ]));
 
         $workChartName = 'work_chart_' . date('Y-m-d H:i:s') . '.png';
-        $workChartPath = public_path($workChartName);
-        $roomChartPath = $chartFolder . '/' . $workChartName;
+        $workChartPath = $chartFolder . '/' . $workChartName;
         file_put_contents($workChartPath, $qcWork->toBinary());
 
         // Room Chart
