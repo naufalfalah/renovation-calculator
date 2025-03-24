@@ -165,8 +165,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const propertySizeInput = document.querySelector('input[name="size"]');
-        if (!propertySizeInput.value.trim()) {
+        const propertySizeValue = propertySizeInput.value.trim();
+        if (!propertySizeValue) {
             showError(propertySizeInput.parentElement, 'Please enter the property size');
+            isValid = false;
+        } else if (parseInt(propertySizeValue, 10) > 999) {
+            showError(propertySizeInput.parentElement, 'Property size cannot be greater than 999.');
             isValid = false;
         }
 
