@@ -14,25 +14,38 @@
     <title>Interior Space Budget Report</title>
     <style>
         /* Base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
+        @page {
+            margin: 50px;
         }
 
         body {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            color: #333;
-            line-height: 1.5;
+            font-family: sans-serif;
+            font-size: 14px;
         }
 
-        .page {
-            padding: 20px 40px;
-            margin-bottom: 20px;
-            border-top: 10px solid #5A2828;
+        .page-break {
+            page-break-after: always;
+        }
+
+        header, footer {
+            position: fixed;
+            left: 0px;
+            right: 0px;
+            height: 50px;
+            text-align: center;
+        }
+
+        header {
+            top: -30px;
+        }
+
+        footer {
+            bottom: -30px;
+        }
+
+        .content {
+            margin-top: 60px;
+            margin-bottom: 60px;
         }
 
         /* Header styles */
@@ -115,12 +128,14 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
 
         .work-section {
             flex: 1;
-            min-width: 300px;
+            /* min-width: 300px; */
+            display: inline-block;
+            width: 45%;
         }
 
         .work-title {
@@ -144,6 +159,7 @@
             padding: 10px 15px;
             font-weight: bold;
             width: 40%;
+            font-size: 12px;
         }
 
         .work-level {
@@ -166,9 +182,10 @@
         }
 
         .other-work-item {
-            width: 23%;
+            width: 100%;
             text-align: center;
             margin-bottom: 20px;
+            font-size: 12px;
         }
 
         .other-work-title {
@@ -413,6 +430,7 @@
 
         .hack-item {
             flex: 1;
+            flex-grow: 1;
             min-width: 45%;
             background-color: #f4f4f8;
             border-radius: 10px;
@@ -441,10 +459,10 @@
             line-height: 1.5;
         }
 
-        .flooring-hack {
+        /* .flooring-hack {
             width: 100%;
             margin-top: 20px;
-        }
+        } */
     </style>
 </head>
 
@@ -464,185 +482,224 @@
         <div class="section-header">Overview</div>
 
         <div class="section-content">
-            <div class="property-info">
-                <h3>Property Details</h3>
-                <p>{{ PropertyTypeEnum::labelFromValue($property_type) }}, {{ PropertyStatusEnum::labelFromValue($property_status) }}, {{ $size ?? '' }}{{ $base_unit ?? '' }}
-                </p>
-                <p>{{ $number_of_rooms[3] }} Bedrooms, {{ $number_of_rooms[4] }} Bathrooms</p>
-            </div>
-
-            <div class="property-info">
-                <h3>Rooms to Renovate</h3>
-                @foreach ($room_labels as $room)
-                    <p>
-                        {{ $room }} @if (!$loop->last), @endif
-                    </p>
-                @endforeach
-            </div>
-
-            <div class="budget-info">
-                <h3>Your Estimated Renovation Budget</h3>
-                <div class="budget-amount">{{ $result['budget_range'] }}</div>
-            </div>
+            <table>
+                <tr>
+                    <td style="vertical-align: top;">
+                        <div class="property-info">
+                            <h3>Property Details</h3>
+                            <p>{{ PropertyTypeEnum::labelFromValue($property_type) }}, {{ PropertyStatusEnum::labelFromValue($property_status) }}, {{ $size ?? '' }}{{ $base_unit ?? '' }}
+                            </p>
+                            <p>{{ $number_of_rooms[3] }} Bedrooms, {{ $number_of_rooms[4] }} Bathrooms</p>
+                        </div>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <div class="property-info">
+                            <h3>Rooms to Renovate</h3>
+                            @foreach ($room_labels as $room)
+                                <p>
+                                    {{ $room }} @if (!$loop->last), @endif
+                                </p>
+                            @endforeach
+                        </div>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <div class="budget-info">
+                            <h3>Your Estimated Renovation Budget</h3>
+                            <div class="budget-amount">{{ $result['budget_range'] }}</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Main Works -->
         <div class="section-header" style="border-radius: 30px;">Main Works</div>
 
         <div class="works-container">
-            <div class="work-section">
-                <div class="work-title">Living/Dining</div>
-                <table class="work-table">
-                    <tr>
-                        <td class="work-item">Hacking</td>
-                        <td class="work-level">{{ isset($works[1]) ? WorkPackageNameEnum::labelFromValue($works[1]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[1]) ? $works[1]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Masonry</td>
-                        <td class="work-level">{{ isset($works[2]) ? WorkPackageNameEnum::labelFromValue($works[2]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[2]) ? $works[2]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Carpentry</td>
-                        <td class="work-level">{{ isset($works[3]) ? WorkPackageNameEnum::labelFromValue($works[3]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[3]) ? $works[3]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Ceiling & Partition</td>
-                        <td class="work-level">{{ isset($works[4]) ? WorkPackageNameEnum::labelFromValue($works[4]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[4]) ? $works[4]->formatted_budget : '-' }}</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="work-section">
-                <div class="work-title">Kitchen</div>
-                <table class="work-table">
-                    <tr>
-                        <td class="work-item">Hacking</td>
-                        <td class="work-level">{{ isset($works[5]) ? WorkPackageNameEnum::labelFromValue($works[5]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[5]) ? $works[5]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Masonry</td>
-                        <td class="work-level">{{ isset($works[6]) ? WorkPackageNameEnum::labelFromValue($works[6]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[6]) ? $works[6]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Carpentry</td>
-                        <td class="work-level">{{ isset($works[7]) ? WorkPackageNameEnum::labelFromValue($works[7]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[7]) ? $works[7]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Plumbing</td>
-                        <td class="work-level">{{ isset($works[8]) ? WorkPackageNameEnum::labelFromValue($works[8]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[8]) ? $works[8]->formatted_budget : '-' }}</td>
-                    </tr>
-                </table>
-            </div>
+            <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="width: 50%; padding: 10px;">
+                        <div class="work-section" style="width: 100%;">
+                            <div class="work-title">Living/Dining</div>
+                            <table class="work-table">
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Hacking</td>
+                                    <td class="work-level">{{ isset($works[1]) ? WorkPackageNameEnum::labelFromValue($works[1]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[1]) ? $works[1]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Masonry</td>
+                                    <td class="work-level">{{ isset($works[2]) ? WorkPackageNameEnum::labelFromValue($works[2]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[2]) ? $works[2]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Carpentry</td>
+                                    <td class="work-level">{{ isset($works[3]) ? WorkPackageNameEnum::labelFromValue($works[3]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[3]) ? $works[3]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Ceiling & Partition</td>
+                                    <td class="work-level">{{ isset($works[4]) ? WorkPackageNameEnum::labelFromValue($works[4]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[4]) ? $works[4]->formatted_budget : '-' }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                    <td style="width: 50%; padding: 10px;">
+                        <div class="work-section" style="width: 100%;">
+                            <div class="work-title">Kitchen</div>
+                            <table class="work-table">
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Hacking</td>
+                                    <td class="work-level">{{ isset($works[5]) ? WorkPackageNameEnum::labelFromValue($works[5]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[5]) ? $works[5]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Masonry</td>
+                                    <td class="work-level">{{ isset($works[6]) ? WorkPackageNameEnum::labelFromValue($works[6]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[6]) ? $works[6]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Carpentry</td>
+                                    <td class="work-level">{{ isset($works[7]) ? WorkPackageNameEnum::labelFromValue($works[7]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[7]) ? $works[7]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Plumbing</td>
+                                    <td class="work-level">{{ isset($works[8]) ? WorkPackageNameEnum::labelFromValue($works[8]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[8]) ? $works[8]->formatted_budget : '-' }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <div class="works-container">
-            <div class="work-section">
-                <div class="work-title">Bedrooms</div>
-                <table class="work-table">
-                    <tr>
-                        <td class="work-item">Hacking</td>
-                        <td class="work-level">{{ isset($works[9]) ? WorkPackageNameEnum::labelFromValue($works[9]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[9]) ? $works[9]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Masonry</td>
-                        <td class="work-level">{{ isset($works[10]) ? WorkPackageNameEnum::labelFromValue($works[10]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[10]) ? $works[10]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Carpentry</td>
-                        <td class="work-level">{{ isset($works[11]) ? WorkPackageNameEnum::labelFromValue($works[11]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[11]) ? $works[11]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Ceiling & Partition</td>
-                        <td class="work-level">{{ isset($works[12]) ? WorkPackageNameEnum::labelFromValue($works[12]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[12]) ? $works[12]->formatted_budget : '-' }}</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="work-section">
-                <div class="work-title">Bathrooms</div>
-                <table class="work-table">
-                    <tr>
-                        <td class="work-item">Hacking</td>
-                        <td class="work-level">{{ isset($works[13]) ? WorkPackageNameEnum::labelFromValue($works[13]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[13]) ? $works[13]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Masonry</td>
-                        <td class="work-level">{{ isset($works[14]) ? WorkPackageNameEnum::labelFromValue($works[14]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[14]) ? $works[14]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Carpentry</td>
-                        <td class="work-level">{{ isset($works[15]) ? WorkPackageNameEnum::labelFromValue($works[15]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[15]) ? $works[15]->formatted_budget : '-' }}</td>
-                    </tr>
-                    <tr>
-                        <td class="work-item">Plumbing</td>
-                        <td class="work-level">{{ isset($works[16]) ? WorkPackageNameEnum::labelFromValue($works[16]->name) : '-' }}</td>
-                        <td class="work-cost">{{ isset($works[16]) ? $works[16]->formatted_budget : '-' }}</td>
-                    </tr>
-                </table>
-            </div>
+            <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="width: 50%; padding: 10px;">
+                        <div class="work-section" style="width: 100%;">
+                            <div class="work-title">Bedrooms</div>
+                            <table class="work-table">
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Hacking</td>
+                                    <td class="work-level">{{ isset($works[9]) ? WorkPackageNameEnum::labelFromValue($works[9]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[9]) ? $works[9]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Masonry</td>
+                                    <td class="work-level">{{ isset($works[10]) ? WorkPackageNameEnum::labelFromValue($works[10]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[10]) ? $works[10]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Carpentry</td>
+                                    <td class="work-level">{{ isset($works[11]) ? WorkPackageNameEnum::labelFromValue($works[11]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[11]) ? $works[11]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Ceiling & Partition</td>
+                                    <td class="work-level">{{ isset($works[12]) ? WorkPackageNameEnum::labelFromValue($works[12]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[12]) ? $works[12]->formatted_budget : '-' }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                    <td style="width: 50%; padding: 10px;">
+                        <div class="work-section" style="width: 100%;">
+                            <div class="work-title">Bathrooms</div>
+                            <table class="work-table">
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Hacking</td>
+                                    <td class="work-level">{{ isset($works[13]) ? WorkPackageNameEnum::labelFromValue($works[13]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[13]) ? $works[13]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Masonry</td>
+                                    <td class="work-level">{{ isset($works[14]) ? WorkPackageNameEnum::labelFromValue($works[14]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[14]) ? $works[14]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Carpentry</td>
+                                    <td class="work-level">{{ isset($works[15]) ? WorkPackageNameEnum::labelFromValue($works[15]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[15]) ? $works[15]->formatted_budget : '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="work-item" style="width: 50%;">Plumbing</td>
+                                    <td class="work-level">{{ isset($works[16]) ? WorkPackageNameEnum::labelFromValue($works[16]->name) : '-' }}</td>
+                                    <td class="work-cost">{{ isset($works[16]) ? $works[16]->formatted_budget : '-' }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Other Additional Works -->
         <div class="section-header" style="border-radius: 30px;">Other Additional Works</div>
 
         <div class="other-works">
-            <div class="other-work-item" style="display: inline-block;">
-                <div class="other-work-title">Electrical Works</div>
-                <div class="other-work-level">{{ isset($other_works[1]) ? WorkPackageNameEnum::labelFromValue($other_works[1]->name) : '-' }}</div>
-                <div class="other-work-cost">{{ isset($other_works[1]) ? $other_works[1]->formatted_budget : '-' }}</div>
-            </div>
-
-            <div class="other-work-item" style="display: inline-block;">
-                <div class="other-work-title">Glass & Aluminium</div>
-                <div class="other-work-level">{{ isset($other_works[2]) ? WorkPackageNameEnum::labelFromValue($other_works[2]->name) : '-' }}</div>
-                <div class="other-work-cost">{{ isset($other_works[2]) ? $other_works[2]->formatted_budget : '-' }}</div>
-            </div>
-
-            <div class="other-work-item" style="display: inline-block;">
-                <div class="other-work-title">Painting</div>
-                <div class="other-work-level">{{ isset($other_works[3]) ? WorkPackageNameEnum::labelFromValue($other_works[3]->name) : '-' }}</div>
-                <div class="other-work-cost">{{ isset($other_works[3]) ? $other_works[3]->formatted_budget : '-' }}</div>
-            </div>
-
-            <div class="other-work-item" style="display: inline-block;">
-                <div class="other-work-title">Cleaning & Polishing</div>
-                <div class="other-work-level">{{ isset($other_works[4]) ? WorkPackageNameEnum::labelFromValue($other_works[4]->name) : '-' }}</div>
-                <div class="other-work-cost">{{ isset($other_works[4]) ? $other_works[4]->formatted_budget : '-' }}</div>
-            </div>
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 25%; text-align: center;">
+                        <div class="other-work-item">
+                            <div class="other-work-title">Electrical Works</div>
+                            <div class="other-work-level">{{ isset($other_works[1]) ? WorkPackageNameEnum::labelFromValue($other_works[1]->name) : '-' }}</div>
+                            <div class="other-work-cost">{{ isset($other_works[1]) ? $other_works[1]->formatted_budget : '-' }}</div>
+                        </div>
+                    </td>
+                    <td style="width: 25%; text-align: center;">
+                        <div class="other-work-item">
+                            <div class="other-work-title">Glass & Aluminium</div>
+                            <div class="other-work-level">{{ isset($other_works[2]) ? WorkPackageNameEnum::labelFromValue($other_works[2]->name) : '-' }}</div>
+                            <div class="other-work-cost">{{ isset($other_works[2]) ? $other_works[2]->formatted_budget : '-' }}</div>
+                        </div>
+                    </td>
+                    <td style="width: 25%; text-align: center;">
+                        <div class="other-work-item">
+                            <div class="other-work-title">Painting</div>
+                            <div class="other-work-level">{{ isset($other_works[3]) ? WorkPackageNameEnum::labelFromValue($other_works[3]->name) : '-' }}</div>
+                            <div class="other-work-cost">{{ isset($other_works[3]) ? $other_works[3]->formatted_budget : '-' }}</div>
+                        </div>
+                    </td>
+                    <td style="width: 25%; text-align: center;">
+                        <div class="other-work-item">
+                            <div class="other-work-title">Cleaning & Polishing</div>
+                            <div class="other-work-level">{{ isset($other_works[4]) ? WorkPackageNameEnum::labelFromValue($other_works[4]->name) : '-' }}</div>
+                            <div class="other-work-cost">{{ isset($other_works[4]) ? $other_works[4]->formatted_budget : '-' }}</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Marketing Section -->
         <div class="marketing">
-            <div class="marketing-text">
-                <div class="marketing-title">Make your renovation easy and rewarding.</div>
-                <div class="marketing-description">
-                    The Qanvast Trust Programme is a free initiative that simplifies your search for a reliable interior
-                    firm and rewards you with upsized furnishing deals and perks. Meet reliable firms backed by
-                    homeowners' reviews and enjoy peace of mind with refundable deposits and our $50,000 Qanvast
-                    Guarantee.
-                </div>
-                <div class="marketing-description">Connect with an interior firm via Qanvast to get started!</div>
-                <a href="#" class="marketing-button">Find Out More</a>
-            </div>
-            <div class="marketing-image">
-                <!-- Placeholder for image -->
-                <img src="https://placehold.co/600x400/EEE/31343C" alt="Renovation illustration">
-            </div>
+            <table>
+                <tr>
+                    <td style="width: 75%; padding: 10px;">
+                        <div class="marketing-text">
+                            <div class="marketing-title">Make your renovation easy and rewarding.</div>
+                            <div class="marketing-description">
+                                The Qanvast Trust Programme is a free initiative that simplifies your search for a reliable interior
+                                firm and rewards you with upsized furnishing deals and perks. Meet reliable firms backed by
+                                homeowners' reviews and enjoy peace of mind with refundable deposits and our $50,000 Qanvast
+                                Guarantee.
+                            </div>
+                            <div class="marketing-description">Connect with an interior firm via Qanvast to get started!</div>
+                            <a href="#" class="marketing-button">Find Out More</a>
+                        </div>
+                    </td>
+                    <td style="width: 25%; padding: 10px;">
+                        <div class="marketing-image">
+                            <!-- Placeholder for image -->
+                            <img src="assets/images/31343C.svg" alt="Renovation illustration" width="100%">
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Disclaimer -->
@@ -653,6 +710,8 @@
         </div>
     </div>
 
+    <div class="page-break"></div>
+
     <!-- Page 2 -->
     <div class="page">
         <!-- Header -->
@@ -660,7 +719,7 @@
             <div class="logo">INTERIOR<span>SPACE</span></div>
             <div class="report-title">
                 <h1>Budget Report</h1>
-                <p>Generated by Qanvast on 19th February 2025</p>
+                <p>Generated by Qanvast on {{ $date ?? '' }}</p>
             </div>
         </div>
 
@@ -670,7 +729,7 @@
         <div class="average-costs">
             <div class="budget-box">
                 <div class="budget-box-title">Your Budget</div>
-                <div class="budget-box-amount">${{ $minimum_budget_range ?? '0' }}-${{ $maximum_budget_range ?? '0' }}
+                <div class="budget-box-amount">{{ $result['budget_range'] }}
                 </div>
             </div>
 
@@ -717,21 +776,29 @@
 
         <!-- Marketing Section -->
         <div class="marketing">
-            <div class="marketing-text">
-                <div class="marketing-title">Make your renovation easy and rewarding.</div>
-                <div class="marketing-description">
-                    The Qanvast Trust Programme is a free initiative that simplifies your search for a reliable interior
-                    firm and rewards you with upsized furnishing deals and perks. Meet reliable firms backed by
-                    homeowners' reviews and enjoy peace of mind with refundable deposits and our $50,000 Qanvast
-                    Guarantee.
-                </div>
-                <div class="marketing-description">Connect with an interior firm via Qanvast to get started!</div>
-                <a href="#" class="marketing-button">Find Out More</a>
-            </div>
-            <div class="marketing-image">
-                <!-- Placeholder for image -->
-                <img src="https://placehold.co/600x400/EEE/31343C" alt="Renovation illustration">
-            </div>
+            <table>
+                <tr>
+                    <td style="width: 75%; padding: 10px;">
+                        <div class="marketing-text">
+                            <div class="marketing-title">Make your renovation easy and rewarding.</div>
+                            <div class="marketing-description">
+                                The Qanvast Trust Programme is a free initiative that simplifies your search for a reliable interior
+                                firm and rewards you with upsized furnishing deals and perks. Meet reliable firms backed by
+                                homeowners' reviews and enjoy peace of mind with refundable deposits and our $50,000 Qanvast
+                                Guarantee.
+                            </div>
+                            <div class="marketing-description">Connect with an interior firm via Qanvast to get started!</div>
+                            <a href="#" class="marketing-button">Find Out More</a>
+                        </div>
+                    </td>
+                    <td style="width: 25%; padding: 10px;">
+                        <div class="marketing-image">
+                            <!-- Placeholder for image -->
+                            <img src="assets/images/31343C.svg" alt="Renovation illustration" width="100%">
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Disclaimer -->
@@ -742,6 +809,8 @@
         </div>
     </div>
 
+    <div class="page-break"></div>
+
     <!-- Page 3 -->
     <div class="page">
         <!-- Header -->
@@ -749,7 +818,7 @@
             <div class="logo">INTERIOR<span>SPACE</span></div>
             <div class="report-title">
                 <h1>Budget Report</h1>
-                <p>Generated by Qanvast on 19th February 2025</p>
+                <p>Generated by Qanvast on {{ $date ?? '' }}</p>
             </div>
         </div>
 
@@ -759,68 +828,90 @@
                 <div class="chart-title">Budget Breakdown by Works</div>
                 <div class="chart-description">Here's the budget breakdown allocated for each work required.</div>
 
-                <!-- Pie Chart for Works -->
-                <img src="{{ $work_image_path ?? '' }}" alt="Work Chart" style="width: 100%; height: auto;" />
-
-                <div class="chart-legend">
-                    @php
-                        $colorIndex = 0;
-                    @endphp
-                    @foreach ($result['work_percentages'] as $workType => $percentage)
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: {{ $result['work_colors'][$colorIndex] }}; display: inline-block;"></div>
-                            <div class="legend-text" style="display: inline-block;">{{ WorkTypeEnum::labelFromValue($workType) }}</div>
-                            <div class="legend-value" style="display: inline-block; width: auto;">{{ number_format($percentage, 2) }}% (approx. {{ $result['work_budgets'][$workType] }})</div>
-                        </div>
-                        @php
-                            $colorIndex++;
-                        @endphp
-                    @endforeach
-                </div>
+                <table>
+                    <tr>
+                        <td style="width: 50%;">
+                            <!-- Pie Chart for Works -->
+                            <img src="{{ $work_image_path ?? '' }}" alt="Work Chart" style="width: 100%; height: auto;" />
+                        </td>
+                        <td style="width: 50%;">
+                            <div class="chart-legend">
+                                @php
+                                    $colorIndex = 0;
+                                @endphp
+                                @foreach ($result['work_percentages'] as $workType => $percentage)
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background-color: {{ $result['work_colors'][$colorIndex] }}; display: inline-block;"></div>
+                                        <div class="legend-text" style="display: inline-block;">{{ WorkTypeEnum::labelFromValue($workType) }}</div>
+                                        <div class="legend-value" style="display: inline-block; width: auto;">{{ number_format($percentage, 2) }}% (approx. {{ $result['work_budgets'][$workType] }})</div>
+                                    </div>
+                                    @php
+                                        $colorIndex++;
+                                    @endphp
+                                @endforeach
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
 
             <div class="chart-section" style="width: 100%">
                 <div class="chart-title">Budget Breakdown by Room Type</div>
                 <div class="chart-description">Here's the budget breakdown allocated for each room.</div>
 
-                <!-- Pie Chart for Room Type -->
-                <img src="{{ $room_image_path ?? '' }}" alt="Room Chart" style="width: 100%; height: auto;" />
-
-                <div class="chart-legend">
-                    @php
-                        $colorIndex = 0;
-                    @endphp
-                    @foreach ($result['room_percentages'] as $roomName => $percentage)
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: {{ $result['room_colors'][$colorIndex] }}; display: inline-block;"></div>
-                            <div class="legend-text" style="display: inline-block;">{{ $roomName }}</div>
-                            <div class="legend-value" style="display: inline-block;">{{ number_format($percentage, 2) }}% (approx. {{ $result['room_budgets'][$roomName] }})</div>
-                        </div>
-                        @php
-                            $colorIndex++;
-                        @endphp
-                    @endforeach
-                </div>
+                <table>
+                    <tr>
+                        <td style="width: 50%;">
+                            <!-- Pie Chart for Room Type -->
+                            <img src="{{ $room_image_path ?? '' }}" alt="Room Chart" style="width: 100%; height: auto;" />
+                        </td>
+                        <td style="width: 50%;">
+                            <div class="chart-legend">
+                                @php
+                                    $colorIndex = 0;
+                                @endphp
+                                @foreach ($result['room_percentages'] as $roomName => $percentage)
+                                    <div class="legend-item">
+                                        <div class="legend-color" style="background-color: {{ $result['room_colors'][$colorIndex] }}; display: inline-block;"></div>
+                                        <div class="legend-text" style="display: inline-block;">{{ $roomName }}</div>
+                                        <div class="legend-value" style="display: inline-block;">{{ number_format($percentage, 2) }}% (approx. {{ $result['room_budgets'][$roomName] }})</div>
+                                    </div>
+                                    @php
+                                        $colorIndex++;
+                                    @endphp
+                                @endforeach
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
 
         <!-- Marketing Section -->
         <div class="marketing">
-            <div class="marketing-text">
-                <div class="marketing-title">Make your renovation easy and rewarding.</div>
-                <div class="marketing-description">
-                    The Qanvast Trust Programme is a free initiative that simplifies your search for a reliable interior
-                    firm and rewards you with upsized furnishing deals and perks. Meet reliable firms backed by
-                    homeowners' reviews and enjoy peace of mind with refundable deposits and our $50,000 Qanvast
-                    Guarantee.
-                </div>
-                <div class="marketing-description">Connect with an interior firm via Qanvast to get started!</div>
-                <a href="#" class="marketing-button">Find Out More</a>
-            </div>
-            <div class="marketing-image">
-                <!-- Placeholder for image -->
-                <img src="https://placehold.co/600x400/EEE/31343C" alt="Renovation illustration">
-            </div>
+            <table>
+                <tr>
+                    <td style="width: 75%; padding: 10px;">
+                        <div class="marketing-text">
+                            <div class="marketing-title">Make your renovation easy and rewarding.</div>
+                            <div class="marketing-description">
+                                The Qanvast Trust Programme is a free initiative that simplifies your search for a reliable interior
+                                firm and rewards you with upsized furnishing deals and perks. Meet reliable firms backed by
+                                homeowners' reviews and enjoy peace of mind with refundable deposits and our $50,000 Qanvast
+                                Guarantee.
+                            </div>
+                            <div class="marketing-description">Connect with an interior firm via Qanvast to get started!</div>
+                            <a href="#" class="marketing-button">Find Out More</a>
+                        </div>
+                    </td>
+                    <td style="width: 25%; padding: 10px;">
+                        <div class="marketing-image">
+                            <!-- Placeholder for image -->
+                            <img src="assets/images/31343C.svg" alt="Renovation illustration" width="100%">
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Disclaimer -->
@@ -831,6 +922,8 @@
         </div>
     </div>
 
+    <div class="page-break"></div>
+
     <!-- Page 4 -->
     <div class="page">
         <!-- Header -->
@@ -838,7 +931,7 @@
             <div class="logo">INTERIOR<span>SPACE</span></div>
             <div class="report-title">
                 <h1>Budget Report</h1>
-                <p>Generated by Qanvast on 19th February 2025</p>
+                <p>Generated by Qanvast on {{ $date ?? '' }}</p>
             </div>
         </div>
 
@@ -852,84 +945,106 @@
         </div>
 
         <div class="hacks-container">
-            <div class="hack-item">
-                <div class="hack-title">
-                    <div class="hack-icon" style="display: inline-block;"></div>
-                    Renovation Packages
-                </div>
-                <div class="hack-description">
-                    Renovation packages aren't always the most cost-efficient option out there. Decide wisely many come
-                    with limitations in terms of design, amount of work done and materials. Sometimes, top-ups may even
-                    end up costing more
-                </div>
-            </div>
-
-            <div class="hack-item">
-                <div class="hack-title">
-                    <div class="hack-icon" style="display: inline-block;"></div>
-                    Electrical Wiring
-                </div>
-                <div class="hack-description">
-                    Don't go overboard installing power points having more sockets means more rewiring work and
-                    expenses. This could mean your final expenditure on electrical works will end up being significantly
-                    higher, especially if you're completing rewiring an older resale flat
-                </div>
-            </div>
-
-            <div class="hack-item">
-                <div class="hack-title">
-                    <div class="hack-icon" style="display: inline-block;"></div>
-                    Carpentry
-                </div>
-                <div class="hack-description">
-                    Customised carpentry is one of the more expensive components in a renovation quote, as prices vary
-                    based on the materials used and amount of workmanship required. If you are working with a tight
-                    budget, consider going for more loose furniture instead.
-                </div>
-            </div>
-
-            <div class="hack-item">
-                <div class="hack-title">
-                    <div class="hack-icon" style="display: inline-block;"></div>
-                    Hacking
-                </div>
-                <div class="hack-description">
-                    If you're working on a tight budget, skip out on hacking wherever you can as it can easily set you
-                    back by hundreds to thousands. In fact, half-hacked walls are more expensive than fully hacked ones.
-                    Why? Additional work is required to fully hack and patch the wall back up to half length.
-                </div>
-            </div>
-
-            <div class="hack-item flooring-hack">
-                <div class="hack-title">
-                    <div class="hack-icon" style="display: inline-block;"></div>
-                    Flooring
-                </div>
-                <div class="hack-description">
-                    Flooring is another expensive component; changing the entire floor can be relatively costly given
-                    the area size. Check with your interior designer if an overlay is feasible instead. If you're on a
-                    budget, consider vinyl flooring over ceramic tiles or stone for a more wallet-friendly option.
-                </div>
-            </div>
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 50%; max-width: 50%; padding: 10px; align-items: stretch;">
+                        <div class="hack-item">
+                            <div class="hack-title" style="vertical-align: top;">
+                                <div class="hack-icon" style="display: inline-block;"></div>
+                                <div style="display: inline-block;">Renovation Packages</div>
+                            </div>
+                            <div class="hack-description">
+                                Renovation packages aren't always the most cost-efficient option out there. Decide wisely many come
+                                with limitations in terms of design, amount of work done and materials. Sometimes, top-ups may even
+                                end up costing more
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width: 50%; max-width: 50%; padding: 10px; align-items: stretch;">
+                        <div class="hack-item">
+                            <div class="hack-title" style="vertical-align: top;">
+                                <div class="hack-icon" style="display: inline-block;"></div>
+                                <div style="display: inline-block;">Electrical Wiring</div>
+                            </div>
+                            <div class="hack-description">
+                                Don't go overboard installing power points having more sockets means more rewiring work and
+                                expenses. This could mean your final expenditure on electrical works will end up being significantly
+                                higher, especially if you're completing rewiring an older resale flat
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%; max-width: 50%; padding: 10px; align-items: stretch;">
+                        <div class="hack-item">
+                            <div class="hack-title" style="vertical-align: top;">
+                                <div class="hack-icon" style="display: inline-block;"></div>
+                                <div style="display: inline-block;">Carpentry</div>
+                            </div>
+                            <div class="hack-description">
+                                Customised carpentry is one of the more expensive components in a renovation quote, as prices vary
+                                based on the materials used and amount of workmanship required. If you are working with a tight
+                                budget, consider going for more loose furniture instead.
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width: 50%; max-width: 50%; padding: 10px; align-items: stretch;">
+                        <div class="hack-item">
+                            <div class="hack-title" style="vertical-align: top;">
+                                <div class="hack-icon" style="display: inline-block;"></div>
+                                <div style="display: inline-block;">Hacking</div>
+                            </div>
+                            <div class="hack-description">
+                                If you're working on a tight budget, skip out on hacking wherever you can as it can easily set you
+                                back by hundreds to thousands. In fact, half-hacked walls are more expensive than fully hacked ones.
+                                Why? Additional work is required to fully hack and patch the wall back up to half length.
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 10px;">
+                        <div class="hack-item flooring-hack">
+                            <div class="hack-title" style="vertical-align: top;">
+                                <div class="hack-icon" style="display: inline-block;"></div>
+                                <div style="display: inline-block;">Flooring</div>
+                            </div>
+                            <div class="hack-description">
+                                Flooring is another expensive component; changing the entire floor can be relatively costly given
+                                the area size. Check with your interior designer if an overlay is feasible instead. If you're on a
+                                budget, consider vinyl flooring over ceramic tiles or stone for a more wallet-friendly option.
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Marketing Section -->
         <div class="marketing">
-            <div class="marketing-text">
-                <div class="marketing-title">Make your renovation easy and rewarding.</div>
-                <div class="marketing-description">
-                    The Qanvast Trust Programme is a free initiative that simplifies your search for a reliable interior
-                    firm and rewards you with upsized furnishing deals and perks. Meet reliable firms backed by
-                    homeowners' reviews and enjoy peace of mind with refundable deposits and our $50,000 Qanvast
-                    Guarantee.
-                </div>
-                <div class="marketing-description">Connect with an interior firm via Qanvast to get started!</div>
-                <a href="#" class="marketing-button">Find Out More</a>
-            </div>
-            <div class="marketing-image">
-                <!-- Placeholder for image -->
-                <img src="https://placehold.co/600x400/EEE/31343C" alt="Renovation illustration">
-            </div>
+            <table>
+                <tr>
+                    <td style="width: 75%; padding: 10px;">
+                        <div class="marketing-text">
+                            <div class="marketing-title">Make your renovation easy and rewarding.</div>
+                            <div class="marketing-description">
+                                The Qanvast Trust Programme is a free initiative that simplifies your search for a reliable interior
+                                firm and rewards you with upsized furnishing deals and perks. Meet reliable firms backed by
+                                homeowners' reviews and enjoy peace of mind with refundable deposits and our $50,000 Qanvast
+                                Guarantee.
+                            </div>
+                            <div class="marketing-description">Connect with an interior firm via Qanvast to get started!</div>
+                            <a href="#" class="marketing-button">Find Out More</a>
+                        </div>
+                    </td>
+                    <td style="width: 25%; padding: 10px;">
+                        <div class="marketing-image">
+                            <!-- Placeholder for image -->
+                            <img src="assets/images/31343C.svg" alt="Renovation illustration" width="100%">
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Disclaimer -->

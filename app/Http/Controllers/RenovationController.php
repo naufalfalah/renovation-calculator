@@ -148,11 +148,21 @@ class RenovationController extends Controller
         $qcWork->setConfig(json_encode([
             'type' => 'pie',
             'data' => [
-                'labels' => array_keys($report['result']['work_percentages']),
+                // 'labels' => array_keys($report['result']['work_percentages']),
                 'datasets' => [[
                     'data' => array_values($report['result']['work_percentages']),
-                    'backgroundColor' => $report['result']['work_colors'],
+                    'backgroundColor' => array_slice($report['result']['work_colors'], 0, count($report['result']['work_percentages'])),
                 ]]
+            ],
+            'options' => [
+                'plugins' => [
+                    'legend' => [
+                        'display' => false,
+                    ],
+                    'datalabels' => [
+                        'display' => false
+                    ]
+                ]
             ]
         ]));
 
@@ -169,11 +179,21 @@ class RenovationController extends Controller
         $qcRoom->setConfig(json_encode([
             'type' => 'pie',
             'data' => [
-                'labels' => array_keys($report['result']['room_percentages']),
+                // 'labels' => array_keys($report['result']['room_percentages']),
                 'datasets' => [[
                     'data' => array_values($report['result']['room_percentages']),
                     'backgroundColor' => array_slice($report['result']['room_colors'], 0, count($report['result']['room_percentages'])),
                 ]]
+            ],
+            'options' => [
+                'plugins' => [
+                    'legend' => [
+                        'display' => false,
+                    ],
+                    'datalabels' => [
+                        'display' => false
+                    ]
+                ]
             ]
         ]));
 
@@ -237,6 +257,10 @@ class RenovationController extends Controller
                     "Glass & Aluminium" => 21.33,
                     "Cleaning & Polishing" => 5.33,
                 ],
+                "work_colors" => [
+                    '#3498db', '#e84393', '#f1c40f', '#2ecc71',
+                    '#9b59b6', '#34495e', '#16a085', '#d35400', '#c0392b'
+                ],
                 "room_percentages" => [
                     "Living/Dining" => 25.0,
                     "Kitchen" => 25.0,
@@ -249,9 +273,18 @@ class RenovationController extends Controller
                     "Bedroom" => 25.0,
                     "Bathroom" => 25.0,
                 ],
+                "room_colors" => [
+                    '#e67e22', '#e74c3c', '#8e44ad', '#3498db'
+                ],
                 "market_position" => "lower-end range",
             ],
         ];
+        // dd($report);
+
+        $chartFolder = public_path('chart');
+        if (!file_exists($chartFolder)) {
+            mkdir($chartFolder, 0777, true);
+        }
 
         $qcWork = new \QuickChart();
         $qcWork->setWidth(500);
@@ -261,23 +294,26 @@ class RenovationController extends Controller
         $qcWork->setConfig(json_encode([
             'type' => 'pie',
             'data' => [
-                'labels' => array_keys($report['result']['work_percentages']),
+                // 'labels' => array_keys($report['result']['work_percentages']),
                 'datasets' => [[
                     'data' => array_values($report['result']['work_percentages']),
-                    'backgroundColor' => $report['result']['work_colors'],
+                    'backgroundColor' => array_slice($report['result']['work_colors'], 0, count($report['result']['work_percentages'])),
                 ]]
+            ],
+            'options' => [
+                'plugins' => [
+                    'legend' => [
+                        'display' => false,
+                    ],
+                    'datalabels' => [
+                        'display' => false
+                    ]
+                ]
             ]
         ]));
 
-        $chartFolder = public_path('chart');
-
-        if (!file_exists($chartFolder)) {
-            mkdir($chartFolder, 0777, true);
-        }
-
         $workChartName = 'work_chart_' . date('Y-m-d H:i:s') . '.png';
-        $workChartPath = public_path($workChartName);
-        $roomChartPath = $chartFolder . '/' . $workChartName;
+        $workChartPath = $chartFolder . '/' . $workChartName;
         file_put_contents($workChartPath, $qcWork->toBinary());
 
         // Room Chart
@@ -289,11 +325,21 @@ class RenovationController extends Controller
         $qcRoom->setConfig(json_encode([
             'type' => 'pie',
             'data' => [
-                'labels' => array_keys($report['result']['room_percentages']),
+                // 'labels' => array_keys($report['result']['room_percentages']),
                 'datasets' => [[
                     'data' => array_values($report['result']['room_percentages']),
                     'backgroundColor' => array_slice($report['result']['room_colors'], 0, count($report['result']['room_percentages'])),
                 ]]
+            ],
+            'options' => [
+                'plugins' => [
+                    'legend' => [
+                        'display' => false,
+                    ],
+                    'datalabels' => [
+                        'display' => false
+                    ]
+                ]
             ]
         ]));
 
@@ -306,8 +352,9 @@ class RenovationController extends Controller
 
         // Generate PDF
         $pdf = Pdf::loadView('pdf.report', $report);
-
         return $pdf->stream('report.pdf');
+
+        // return view('pdf.report', $report);
     }
 
     public function web()
