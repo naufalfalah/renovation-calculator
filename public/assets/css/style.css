@@ -61,7 +61,8 @@ h2 {
 }
 
 .option-btn,
-.restart-btn {
+.restart-btn,
+.download-btn {
     display: block;
     width: 100%;
     margin-bottom: 1rem;
@@ -128,7 +129,7 @@ button:hover {
     background-color: #45a049;
 }
 
-.clear-selection {
+.clear-selection, .download-btn {
     background-color: #4585a0;
 }
 

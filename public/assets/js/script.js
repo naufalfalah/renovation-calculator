@@ -488,11 +488,16 @@ document.querySelector('[data-step="8"] .submit-btn').addEventListener('click', 
         })
         .then(response => response.json())
         .then(response => {
+            console.log("response", response);
             if (response.success) {
                 console.log('Submit Success 🎉');
 
                 document.querySelector('#budgetRangeDisplay').textContent = response.data.budget_range;
                 document.querySelector('#userEmailDisplay').textContent = response.data.email;
+
+                const downloadLink = document.querySelector('#downloadLink');
+
+                downloadLink.href = response.data.pdf_url;
 
                 console.log("nextStep")
                 nextStep();

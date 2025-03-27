@@ -16,6 +16,7 @@ use App\Models\WorkPackage;
 use App\Services\BudgetCalculationService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
+
 require_once base_path('vendor/ianw/quickchart/QuickChart.php');
 
 class RenovationController extends Controller
@@ -207,6 +208,14 @@ class RenovationController extends Controller
         $pdf = Pdf::loadView('pdf.report', $report);
         $pdfContent = $pdf->output();
 
+        if (!file_exists(public_path('pdf'))) {
+            mkdir(public_path('pdf'), 0777, true);
+        }
+
+        $pdfFileName = 'renovation_report_' . time() . '.pdf';
+        $pdfPath = public_path('pdf/' . $pdfFileName);
+        $pdf->save($pdfPath);
+
         Mail::to($email)->send(new ReportMail($report, $pdfContent));
 
         return response()->json([
@@ -215,6 +224,7 @@ class RenovationController extends Controller
             'data' => [
                 'email' => $email,
                 'budget_range' => $result['budget_range'],
+                'pdf_url' => asset('pdf/' . $pdfFileName),
             ],
         ]);
     }

@@ -308,6 +308,9 @@
                         <p>Our team will reach out with a shortlist of Interior Designers shortly.</p>
                     </div>
 
+                    <a href="#" id="downloadLink" download>
+                        <button type="button" class="download-btn" id="downloadBtn">Download Result</button>
+                    </a>
                     <button class="restart-btn" type="button" id="restartBtn">Start Over</button>
                 </div>
             </form>
