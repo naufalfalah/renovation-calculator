@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('work_packages', function (Blueprint $table) {
             $table->id();
+            $table->integer('min_property_size')->min(1);
+            $table->integer('max_property_size')->max(999);
             $table->unsignedBigInteger('room_id');
+            $table->integer('number_of_room')->nullable();
             $table->unsignedBigInteger('work_id');
             $table->string('name');
             $table->unsignedInteger('lower_bound_budget');
