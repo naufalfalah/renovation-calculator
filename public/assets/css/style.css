@@ -261,6 +261,10 @@ select:focus {
     background-color: #1b5fa7;
 }
 
+#downloadLink {
+    text-decoration: none;
+}
+
 /* Responsive Tweaks */
 @media (max-width: 480px) {
     .phone-input {

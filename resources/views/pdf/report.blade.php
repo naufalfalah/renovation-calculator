@@ -14,8 +14,15 @@
     <title>Interior Space Budget Report</title>
     <style>
         /* Base styles */
-        @page {
-            margin: 50px;
+        @media print {
+            @page {
+                margin: 50px;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+            }
         }
 
         body {
@@ -33,6 +40,7 @@
             right: 0px;
             height: 50px;
             text-align: center;
+            margin-bottom: 2px;
         }
 
         header {
@@ -53,7 +61,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 2px;
         }
 
         .logo {
@@ -67,12 +75,13 @@
 
         .report-title {
             text-align: right;
+            margin-bottom: 2px;
         }
 
         .report-title h1 {
             color: #5A2828;
             font-size: 26px;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
 
         .report-title p {
@@ -84,17 +93,17 @@
         .section-header {
             background-color: #5A2828;
             color: white;
-            padding: 15px 30px;
+            padding: 10px 30px;
             border-radius: 50px;
-            margin-bottom: 20px;
+            margin-bottom: 4px;
             text-align: center;
-            font-size: 20px;
+            font-size: 14px;
         }
 
         .section-content {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 4px;
         }
 
         .property-info {
@@ -103,12 +112,13 @@
         }
 
         .property-info h3 {
-            margin-bottom: 10px;
-            font-size: 18px;
+            margin-bottom: 4px;
+            font-size: 16px;
         }
 
         .property-info p {
-            margin-bottom: 5px;
+            margin: 0;
+            margin-bottom: 2px;
             font-size: 14px;
         }
 
@@ -117,8 +127,13 @@
             flex: 1;
         }
 
+        .budget-info h3 {
+            margin-bottom: 4px;
+            font-size: 16px;
+        }
+
         .budget-amount {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: bold;
             color: #5A2828;
         }
@@ -128,7 +143,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            margin-bottom: 10px;
+            margin-bottom: 2px;
         }
 
         .work-section {
@@ -139,8 +154,8 @@
         }
 
         .work-title {
-            font-size: 18px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            font-size: 16px;
             text-align: center;
         }
 
@@ -152,51 +167,50 @@
         .work-table tr {
             background-color: #5A2828;
             color: white;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
 
         .work-item {
-            padding: 10px 15px;
+            padding: 8px;
             font-weight: bold;
-            width: 40%;
             font-size: 12px;
         }
 
         .work-level {
-            padding: 10px;
+            padding: 8px;
             text-align: center;
-            width: 30%;
+            font-size: 12px;
         }
 
         .work-cost {
-            padding: 10px 15px;
+            padding: 8px;
             text-align: right;
-            width: 30%;
+            font-size: 12px;
         }
 
         .other-works {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 2px;
         }
 
         .other-work-item {
             width: 100%;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 2px;
             font-size: 12px;
         }
 
         .other-work-title {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
 
         .other-work-level {
             font-size: 14px;
             color: #555;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
 
         .other-work-cost {
@@ -206,10 +220,10 @@
         /* Marketing section */
         .marketing {
             background-color: #f4f4f8;
-            padding: 30px;
+            padding: 18px;
             border-radius: 10px;
             display: flex;
-            margin-bottom: 20px;
+            margin-bottom: 2px;
         }
 
         .marketing-text {
@@ -219,12 +233,12 @@
         .marketing-title {
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 2px;
         }
 
         .marketing-description {
-            font-size: 14px;
-            margin-bottom: 15px;
+            font-size: 12px;
+            margin-bottom: 4px;
             line-height: 1.5;
         }
 
@@ -257,7 +271,7 @@
         /* Page 2 styles */
         .average-costs {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2px;
         }
 
         .budget-box {
@@ -271,7 +285,7 @@
 
         .budget-box-title {
             font-size: 16px;
-            margin-bottom: 10px;
+            margin-bottom: 2px;
         }
 
         .budget-box-amount {
@@ -307,7 +321,7 @@
         .cost-range {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 2px;
         }
 
         .cost-range-item {
@@ -320,12 +334,12 @@
             color: white;
             padding: 15px;
             border-radius: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 2px;
         }
 
         .cost-range-title {
             font-size: 14px;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
 
         .cost-range-amount {
@@ -338,20 +352,21 @@
             border-radius: 10px;
             padding: 20px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 2px;
         }
 
         /* Page 3 styles */
         .charts-container {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 2px;
         }
 
         .chart-section {
             width: 48%;
             background-color: #f4f4f8;
             border-radius: 10px;
+            margin-bottom: 2px;
             padding: 20px;
         }
 
@@ -361,12 +376,12 @@
             padding: 10px 20px;
             border-radius: 30px;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 2px;
         }
 
         .chart-description {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 2px;
             font-size: 14px;
         }
 
@@ -401,7 +416,7 @@
         .legend-item {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 2px;
         }
 
         .legend-color {
@@ -425,7 +440,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 2px;
         }
 
         .hack-item {
@@ -440,7 +455,7 @@
         .hack-title {
             text-align: center;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 2px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -463,6 +478,22 @@
             width: 100%;
             margin-top: 20px;
         } */
+
+        .report-title-text {
+            margin-bottom: 2px;
+        }
+
+        .date {
+            margin: 0;
+        }
+
+        h3 {
+            margin: 0;
+        }
+
+        #otherAdditional {
+            margin-top: 8px;
+        }
     </style>
 </head>
 
@@ -471,11 +502,19 @@
     <div class="page">
         <!-- Header -->
         <div class="header">
-            <div class="logo">INTERIOR<span>SPACE</span></div>
-            <div class="report-title">
-                <h1>Budget Report</h1>
-                <p>Generated by Qanvast on {{ $date ?? '' }}</p>
-            </div>
+            <table width="100%">
+                <tr>
+                    <td width="50%">
+                        <div class="logo">INTERIOR<span>SPACE</span></div>
+                    </td>
+                    <td width="50%" style="text-align: end;">
+                        <div class="report-title">
+                            <h1 class="report-title-text">Budget Report</h1>
+                            <p class="date">Generated by Qanvast on {{ $date ?? '' }}</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Overview Section -->
@@ -516,56 +555,56 @@
         <div class="section-header" style="border-radius: 30px;">Main Works</div>
 
         <div class="works-container">
-            <table style="width: 100%;">
+            <table width="100%">
                 <tr style="width: 100%;">
-                    <td style="width: 50%; padding: 10px;">
+                    <td style="width: 50%; padding: 4px;">
                         <div class="work-section" style="width: 100%;">
                             <div class="work-title">Living/Dining</div>
                             <table class="work-table">
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Hacking</td>
+                                    <td class="work-item">Hacking</td>
                                     <td class="work-level">{{ isset($works[1]) ? WorkPackageNameEnum::labelFromValue($works[1]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[1]) ? $works[1]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Masonry</td>
+                                    <td class="work-item">Masonry</td>
                                     <td class="work-level">{{ isset($works[2]) ? WorkPackageNameEnum::labelFromValue($works[2]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[2]) ? $works[2]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Carpentry</td>
+                                    <td class="work-item">Carpentry</td>
                                     <td class="work-level">{{ isset($works[3]) ? WorkPackageNameEnum::labelFromValue($works[3]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[3]) ? $works[3]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Ceiling & Partition</td>
+                                    <td class="work-item">Ceiling & Partition</td>
                                     <td class="work-level">{{ isset($works[4]) ? WorkPackageNameEnum::labelFromValue($works[4]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[4]) ? $works[4]->formatted_budget : '-' }}</td>
                                 </tr>
                             </table>
                         </div>
                     </td>
-                    <td style="width: 50%; padding: 10px;">
+                    <td style="width: 50%; padding: 4px;">
                         <div class="work-section" style="width: 100%;">
                             <div class="work-title">Kitchen</div>
                             <table class="work-table">
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Hacking</td>
+                                    <td class="work-item">Hacking</td>
                                     <td class="work-level">{{ isset($works[5]) ? WorkPackageNameEnum::labelFromValue($works[5]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[5]) ? $works[5]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Masonry</td>
+                                    <td class="work-item">Masonry</td>
                                     <td class="work-level">{{ isset($works[6]) ? WorkPackageNameEnum::labelFromValue($works[6]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[6]) ? $works[6]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Carpentry</td>
+                                    <td class="work-item">Carpentry</td>
                                     <td class="work-level">{{ isset($works[7]) ? WorkPackageNameEnum::labelFromValue($works[7]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[7]) ? $works[7]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Plumbing</td>
+                                    <td class="work-item">Plumbing</td>
                                     <td class="work-level">{{ isset($works[8]) ? WorkPackageNameEnum::labelFromValue($works[8]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[8]) ? $works[8]->formatted_budget : '-' }}</td>
                                 </tr>
@@ -577,56 +616,56 @@
         </div>
 
         <div class="works-container">
-            <table style="width: 100%;">
-                <tr style="width: 100%;">
-                    <td style="width: 50%; padding: 10px;">
+            <table width="100%">
+                <tr>
+                    <td style="width: 50%; padding: 4px;">
                         <div class="work-section" style="width: 100%;">
                             <div class="work-title">Bedrooms</div>
                             <table class="work-table">
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Hacking</td>
+                                    <td class="work-item">Hacking</td>
                                     <td class="work-level">{{ isset($works[9]) ? WorkPackageNameEnum::labelFromValue($works[9]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[9]) ? $works[9]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Masonry</td>
+                                    <td class="work-item">Masonry</td>
                                     <td class="work-level">{{ isset($works[10]) ? WorkPackageNameEnum::labelFromValue($works[10]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[10]) ? $works[10]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Carpentry</td>
+                                    <td class="work-item">Carpentry</td>
                                     <td class="work-level">{{ isset($works[11]) ? WorkPackageNameEnum::labelFromValue($works[11]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[11]) ? $works[11]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Ceiling & Partition</td>
+                                    <td class="work-item">Ceiling & Partition</td>
                                     <td class="work-level">{{ isset($works[12]) ? WorkPackageNameEnum::labelFromValue($works[12]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[12]) ? $works[12]->formatted_budget : '-' }}</td>
                                 </tr>
                             </table>
                         </div>
                     </td>
-                    <td style="width: 50%; padding: 10px;">
+                    <td style="width: 50%; padding: 4px;">
                         <div class="work-section" style="width: 100%;">
                             <div class="work-title">Bathrooms</div>
                             <table class="work-table">
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Hacking</td>
+                                    <td class="work-item">Hacking</td>
                                     <td class="work-level">{{ isset($works[13]) ? WorkPackageNameEnum::labelFromValue($works[13]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[13]) ? $works[13]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Masonry</td>
+                                    <td class="work-item">Masonry</td>
                                     <td class="work-level">{{ isset($works[14]) ? WorkPackageNameEnum::labelFromValue($works[14]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[14]) ? $works[14]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Carpentry</td>
+                                    <td class="work-item">Carpentry</td>
                                     <td class="work-level">{{ isset($works[15]) ? WorkPackageNameEnum::labelFromValue($works[15]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[15]) ? $works[15]->formatted_budget : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="work-item" style="width: 50%;">Plumbing</td>
+                                    <td class="work-item">Plumbing</td>
                                     <td class="work-level">{{ isset($works[16]) ? WorkPackageNameEnum::labelFromValue($works[16]->name) : '-' }}</td>
                                     <td class="work-cost">{{ isset($works[16]) ? $works[16]->formatted_budget : '-' }}</td>
                                 </tr>
@@ -638,10 +677,10 @@
         </div>
 
         <!-- Other Additional Works -->
-        <div class="section-header" style="border-radius: 30px;">Other Additional Works</div>
+        <div class="section-header" style="border-radius: 30px;" id="otherAdditional">Other Additional Works</div>
 
         <div class="other-works">
-            <table style="width: 100%;">
+            <table width="100%">
                 <tr>
                     <td style="width: 25%; text-align: center;">
                         <div class="other-work-item">
@@ -716,11 +755,19 @@
     <div class="page">
         <!-- Header -->
         <div class="header">
-            <div class="logo">INTERIOR<span>SPACE</span></div>
-            <div class="report-title">
-                <h1>Budget Report</h1>
-                <p>Generated by Qanvast on {{ $date ?? '' }}</p>
-            </div>
+            <table width="100%">
+                <tr>
+                    <td width="50%">
+                        <div class="logo">INTERIOR<span>SPACE</span></div>
+                    </td>
+                    <td width="50%" style="text-align: end;">
+                        <div class="report-title">
+                            <h1 class="report-title-text">Budget Report</h1>
+                            <p class="date">Generated by Qanvast on {{ $date ?? '' }}</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Average Renovation Costs -->
@@ -815,16 +862,24 @@
     <div class="page">
         <!-- Header -->
         <div class="header">
-            <div class="logo">INTERIOR<span>SPACE</span></div>
-            <div class="report-title">
-                <h1>Budget Report</h1>
-                <p>Generated by Qanvast on {{ $date ?? '' }}</p>
-            </div>
+            <table width="100%">
+                <tr>
+                    <td width="50%">
+                        <div class="logo">INTERIOR<span>SPACE</span></div>
+                    </td>
+                    <td width="50%" style="text-align: end;">
+                        <div class="report-title">
+                            <h1 class="report-title-text">Budget Report</h1>
+                            <p class="date">Generated by Qanvast on {{ $date ?? '' }}</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Budget Breakdowns -->
         <div class="charts-container">
-            <div class="chart-section" style="width: 100%; margin-bottom 50px;">
+            <div class="chart-section" style="width: 100%;">
                 <div class="chart-title">Budget Breakdown by Works</div>
                 <div class="chart-description">Here's the budget breakdown allocated for each work required.</div>
 
@@ -843,7 +898,7 @@
                                     <div class="legend-item">
                                         <div class="legend-color" style="background-color: {{ $result['work_colors'][$colorIndex] }}; display: inline-block;"></div>
                                         <div class="legend-text" style="display: inline-block;">{{ WorkTypeEnum::labelFromValue($workType) }}</div>
-                                        <div class="legend-value" style="display: inline-block; width: auto;">{{ number_format($percentage, 2) }}% (approx. {{ $result['work_budgets'][$workType] }})</div>
+                                        <div class="legend-value" style="display: inline-block; width: auto;">{{ number_format($percentage, 2) }}% (approx. ${{ number_format($result['work_budgets'][$workType]) }})</div>
                                     </div>
                                     @php
                                         $colorIndex++;
@@ -874,7 +929,7 @@
                                     <div class="legend-item">
                                         <div class="legend-color" style="background-color: {{ $result['room_colors'][$colorIndex] }}; display: inline-block;"></div>
                                         <div class="legend-text" style="display: inline-block;">{{ $roomName }}</div>
-                                        <div class="legend-value" style="display: inline-block;">{{ number_format($percentage, 2) }}% (approx. {{ $result['room_budgets'][$roomName] }})</div>
+                                        <div class="legend-value" style="display: inline-block;">{{ number_format($percentage, 2) }}% (approx. ${{ number_format($result['room_budgets'][$roomName]) }})</div>
                                     </div>
                                     @php
                                         $colorIndex++;
@@ -928,17 +983,25 @@
     <div class="page">
         <!-- Header -->
         <div class="header">
-            <div class="logo">INTERIOR<span>SPACE</span></div>
-            <div class="report-title">
-                <h1>Budget Report</h1>
-                <p>Generated by Qanvast on {{ $date ?? '' }}</p>
-            </div>
+            <table width="100%">
+                <tr>
+                    <td width="50%">
+                        <div class="logo">INTERIOR<span>SPACE</span></div>
+                    </td>
+                    <td width="50%" style="text-align: end;">
+                        <div class="report-title">
+                            <h1 class="report-title-text">Budget Report</h1>
+                            <p class="date">Generated by Qanvast on {{ $date ?? '' }}</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Renovation Budgeting Hacks -->
         <div class="section-header">Renovation Budgeting Hacks</div>
 
-        <div style="margin-bottom: 30px; text-align: center;">
+        <div style="margin-bottom: 2px; text-align: center;">
             <p>We hope our report gives you a better idea of how much to budget for your renovation. Still, it never
                 hurts to save more! Here are some tips that can help shave your renovation bill and avoid extra costs.
             </p>
@@ -947,7 +1010,7 @@
         <div class="hacks-container">
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 50%; max-width: 50%; padding: 10px; align-items: stretch;">
+                    <td style="width: 50%; max-width: 50%; padding: 4px; align-items: stretch;">
                         <div class="hack-item">
                             <div class="hack-title" style="vertical-align: top;">
                                 <div class="hack-icon" style="display: inline-block;"></div>
@@ -960,7 +1023,7 @@
                             </div>
                         </div>
                     </td>
-                    <td style="width: 50%; max-width: 50%; padding: 10px; align-items: stretch;">
+                    <td style="width: 50%; max-width: 50%; padding: 4px; align-items: stretch;">
                         <div class="hack-item">
                             <div class="hack-title" style="vertical-align: top;">
                                 <div class="hack-icon" style="display: inline-block;"></div>
@@ -975,7 +1038,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="width: 50%; max-width: 50%; padding: 10px; align-items: stretch;">
+                    <td style="width: 50%; max-width: 50%; padding: 4px; align-items: stretch;">
                         <div class="hack-item">
                             <div class="hack-title" style="vertical-align: top;">
                                 <div class="hack-icon" style="display: inline-block;"></div>
@@ -988,7 +1051,7 @@
                             </div>
                         </div>
                     </td>
-                    <td style="width: 50%; max-width: 50%; padding: 10px; align-items: stretch;">
+                    <td style="width: 50%; max-width: 50%; padding: 4px; align-items: stretch;">
                         <div class="hack-item">
                             <div class="hack-title" style="vertical-align: top;">
                                 <div class="hack-icon" style="display: inline-block;"></div>
@@ -1024,7 +1087,7 @@
         <div class="marketing">
             <table>
                 <tr>
-                    <td style="width: 75%; padding: 10px;">
+                    <td style="width: 75%; padding: 4px;">
                         <div class="marketing-text">
                             <div class="marketing-title">Make your renovation easy and rewarding.</div>
                             <div class="marketing-description">
