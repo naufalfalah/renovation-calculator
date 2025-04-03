@@ -5,5 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RenovationController::class, 'index']);
 Route::post('/', [RenovationController::class, 'store'])->name('form.store');
+Route::get('/fetch-packages', [RenovationController::class, 'fetchPackages']);
 Route::get('/test/pdf', [RenovationController::class, 'pdf']);
 Route::get('/test/web', [RenovationController::class, 'web']);

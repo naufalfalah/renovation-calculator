@@ -518,3 +518,74 @@ function restart() {
 }
 
 document.getElementById('restartBtn').addEventListener('click', restart);
+
+$(document).ready(function () {
+    function fetchPackages(roomId, numberOfRoom) {
+        $.ajax({
+            url: '/fetch-packages',
+            type: 'GET',
+            data: { roomId, numberOfRoom },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    updateWorkSection(roomId, response.data.works, response.data.packages);
+                } else {
+                    console.error('Failed to fetch packages:', response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', error);
+            }
+        });
+    }
+
+    function updateWorkSection(roomId, works, packages) {
+        const section = $(`.form-step[data-step="${roomId === 3 ? 5 : 6}"] .work-section-container`);
+        section.empty();
+
+        if (works.length === 0 || packages.length === 0) {
+            section.append('<p>No work packages available for the selected number of rooms.</p>');
+            return;
+        }
+
+        // console.log("works", works);
+        // console.log("packages", packages);
+        works.forEach(work => {
+            const workSection = $(`
+                <div class="work-section">
+                    <h3>${work.type_label}</h3>
+                    <div class="packages"></div>
+                    <button type="button" class="clear-selection" data-target="main[${roomId === 5 ? 'bedroom' : 'bathroom'}][${work.id}]">
+                        Clear Selection
+                    </button>
+                </div>
+            `);
+
+            const packagesContainer = workSection.find('.packages');
+            packages
+                .filter(pkg => pkg.work_id === work.id)
+                .forEach(pkg => {
+                    packagesContainer.append(`
+                        <label>
+                            <input type="radio" name="main[${roomId === 3 ? 'bedroom' : 'bathroom'}][${work.id}]" value="${pkg.id}" />
+                            ${pkg.name_label} ($${pkg.lower_bound_budget} - $${pkg.upper_bound_budget}):
+                            ${pkg.description}
+                        </label><br/>
+                    `);
+                });
+
+            section.append(workSection);
+        });
+    }
+
+    $(document).on('change', 'select[name^="number_of_rooms"]', function () {
+        const roomId = $(this).closest('.form-group').data('room');
+        const numberOfRoom = $(this).val();
+        fetchPackages(roomId, numberOfRoom);
+    });
+
+    $(document).on('click', '.clear-selection', function () {
+        let target = $(this).data('target');
+        $(`input[name='${target}']`).prop('checked', false);
+    });
+});

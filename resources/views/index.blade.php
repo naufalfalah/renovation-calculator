@@ -11,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Renovation Calculator</title>
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.4/jquery.xdomainrequest.min.js"></script>
 </head>
 
 <body>
@@ -48,7 +50,7 @@
                     </div>
 
                     @foreach ($roomsWithQuanity as $room)
-                        <div class="form-group">
+                        <div class="form-group" data-room="{{ $room->id }}">
                             <label for="number_of_room_{{ $room->id }}"><strong>Number of
                                     {{ $room->name }}s</strong></label>
                             <select name="number_of_rooms[{{ $room->id }}]" id="number_of_room_{{ $room->id }}"
@@ -162,7 +164,8 @@
                     <h2>Step 5: {{ $bedroom->name }}  Works</h2>
                     <p>If you selected Bedrooms, fill in the works below:</p>
 
-                    @foreach ($bedroom->works as $work)
+                    {{-- Refactored: Dynamic using ajax --}}
+                    {{-- @foreach ($bedroom->works as $work)
                         <div class="work-section">
                             <h3>{{ WorkTypeEnum::labelFromValue($work->type) }}</h3>
                             @foreach ($work->packages as $package)
@@ -181,7 +184,8 @@
                                 Clear Selection
                             </button>
                         </div>
-                    @endforeach
+                    @endforeach --}}
+                    <div class="work-section-container"></div>
 
                     <div class="error-container"></div>
 
@@ -195,7 +199,8 @@
                     <h2>Step 6: {{ $bathroom->name }}  Works</h2>
                     <p>If you selected Bathrooms, fill in the works below:</p>
 
-                    @foreach ($bathroom->works as $work)
+                    {{-- Refactored: Dynamic using ajax --}}
+                    {{-- @foreach ($bathroom->works as $work)
                         <div class="work-section">
                             <h3>{{ WorkTypeEnum::labelFromValue($work->type) }}</h3>
                             @foreach ($work->packages as $package)
@@ -214,7 +219,8 @@
                                 Clear Selection
                             </button>
                         </div>
-                    @endforeach
+                    @endforeach --}}
+                    <div class="work-section-container"></div>
 
                     <div class="error-container"></div>
 

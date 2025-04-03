@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\BaseUnitEnum;
 use App\Enums\PropertyStatusEnum;
 use App\Enums\PropertyTypeEnum;
+use App\Enums\WorkPackageNameEnum;
+use App\Enums\WorkTypeEnum;
 use App\Http\Requests\StoreRenovationRequest;
 use App\Mail\ReportMail;
 use App\Models\OtherWork;
@@ -15,6 +17,7 @@ use App\Models\Work;
 use App\Models\WorkPackage;
 use App\Services\BudgetCalculationService;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 require_once base_path('vendor/ianw/quickchart/QuickChart.php');
@@ -225,6 +228,54 @@ class RenovationController extends Controller
                 'email' => $email,
                 'budget_range' => $result['budget_range'],
                 'pdf_url' => asset('pdf/' . $pdfFileName),
+            ],
+        ]);
+    }
+
+    public function fetchPackages(Request $request)
+    {
+        $roomId = $request->roomId;
+        $numberOfRoom = $request->numberOfRoom;
+
+        $workPackages = WorkPackage::where([
+            'room_id' => $roomId,
+            'number_of_room' => $numberOfRoom,
+        ])->get();
+
+        if ($workPackages->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No packages found for the selected room and quantity.'
+            ], 404);
+        }
+
+        $works = Work::where('room_id', $roomId)->get();
+
+        $formattedPackages = $workPackages->map(function ($package) {
+            return [
+                'id' => $package->id,
+                'name_label' => WorkPackageNameEnum::labelFromValue($package->name),
+                'lower_bound_budget' => $package->lower_bound_budget,
+                'upper_bound_budget' => $package->upper_bound_budget,
+                'description' => $package->description ?? '',
+                'work_id' => $package->work_id,
+                'work_type_label' => WorkTypeEnum::labelFromValue($package->work->type),
+            ];
+        });
+
+        $formattedWorks = $works->map(function ($work) {
+            return [
+                'id' => $work->id,
+                'room_id' => $work->room_id,
+                'type_label' => WorkTypeEnum::labelFromValue($work->type),
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'works' => $formattedWorks,
+                'packages' => $formattedPackages,
             ],
         ]);
     }
